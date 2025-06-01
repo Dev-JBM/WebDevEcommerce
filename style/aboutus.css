@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Podkova&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  background-color: #F3F4F6;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+p {
+  display: inline;
+}
+
+/* HEADER */
+.header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #73A1B1;
+  width: 100%;
+  height: 80px;
+  color: white;
+  z-index: 1000;
+  padding: 0px 40px 0px 40px;
+}
+
+.name a{
+  color: inherit;
+  font-family: Podkova;
+  font-size: 50px;
+  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4);
+  text-decoration: none;
+}
+
+.header-icons img {
+  width: 35px;
+}
+
+.aboutus {
+  font-size: 18px;
+  text-shadow: 0px 3px 3px rgba(0, 0, 0, 0.4);
+}
+
+.aboutus_button,
+.contact_button {
+  transition: all 0.15s ease;
+}
+
+.aboutus_button:hover,
+.contact_button:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.aboutus a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.title-container{
+  background-image: url(../images/about-title-bg.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 400px;
+}
+
+.title-container h1{
+  color: white;
+  font-family: Podkova;
+  font-size: 100px;
+  margin: 0;
+  text-align: center;
+  text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4);
+}
+
+.about-weardyans-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.about-weardyans{
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #708658;
+  height: 120px;
+  font-size: 32px;
+  font-weight: bold;
+  color: #F5F0EB;
+}
+
+.whatis-weardyans{
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0px 200px;
+  font-size: 20px;
+  color: #57473A;
+}
+
+.principles{
+  padding: 0px 80px;
+  display: flex;
+  justify-content: space-between;
+}
+
+h6{
+  display: inline;
+  margin: 0;
+  font-size: 20px;
+}
+
+.mission, .vision, .values{
+  width: 340px;
+  height: 340px;
+  background-color: #F5F0EB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 20px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.mission, .vision, .values p{
+  font-size: 16px;
+}
+
+.values ul{
+  list-style-type: none;
+  padding-left: 0;
+  font-size: 16px;
+}
+
+/* FOOTER */
+footer {
+  width: 100%;
+  height: 150px;
+}
+
+.footer-box {
+  margin-top: 50px;
+  background-color: #E0E3DF;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-icons {
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-icons img {
+  width: 35px;
+  cursor: pointer;
+}
+
+.footer-text {
+  font-family: MuseoModerno;
+}
