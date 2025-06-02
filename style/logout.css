@@ -1,0 +1,90 @@
+/* FOR LOGOUT OPTION */
+.logout-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.35);
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', 'Mandali', 'Aoboshi One', 'MuseoModerno', 'Podkova', sans-serif;
+  }
+  .logout-modal-content {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+    padding: 2.5em 2em 2em 2em;
+    min-width: 320px;
+    max-width: 90vw;
+    text-align: center;
+    animation: modalIn 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  @keyframes modalIn {
+    from { transform: translateY(40px) scale(0.98); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  .logout-modal-content svg {
+    display: block;
+    margin: 0 auto 1.2em auto;
+  }
+  .logout-modal-title {
+    font-size: 1.35em;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 0.5em;
+    letter-spacing: 0.01em;
+    margin-top: 0.2em;
+  }
+  .logout-modal-desc {
+    color: #666;
+    font-size: 1em;
+    margin-bottom: 2em;
+    margin-top: 0.2em;
+  }
+  .logout-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 0.5em;
+  }
+  .logout-btn {
+    font-family: inherit;
+    font-size: 1em;
+    padding: 0.6em 2.2em;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    font-weight: 600;
+    outline: none;
+  }
+  .logout-btn-yes {
+    background: #e74c3c;
+    color: #fff;
+    border: 1.5px solid #e74c3c;
+  }
+  .logout-btn-yes:hover {
+    background: #fff;
+    color: #e74c3c;
+  }
+  .logout-btn-no {
+    background: #fff;
+    color: #222;
+    border: 1.5px solid #bbb;
+  }
+  .logout-btn-no:hover {
+    background: #f5f5f5;
+  }
+  .login-btn-yes {
+    background: #27ae60;
+    color: #fff;
+    border: 1.5px solid #27ae60;
+  }
+  .login-btn-yes:hover {
+    background: #fff;
+    color: #27ae60;
+    border: 1.5px solid #27ae60;
+  }

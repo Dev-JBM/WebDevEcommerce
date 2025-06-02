@@ -1,0 +1,17 @@
+.profile,
+.profile-menu-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid #DCDCDC;
+  object-fit: cover;
+  background: #fff;
+  display: inline-block;
+  vertical-align: middle;
+}
+.user-info .profile-menu-img {
+  width: 64px;
+  height: 64px;
+  border: 5px solid #DCDCDC;
+  margin-bottom: 8px;
+}
