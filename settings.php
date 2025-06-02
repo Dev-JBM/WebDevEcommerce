@@ -138,8 +138,8 @@ $user = mysqli_fetch_assoc($result);
               </div>
 
               <div class="input-box">
-                <label class="add-product-label" for="bdate">Birthdate:</label>
-                <input type="date" id="bdate" value="<?= htmlspecialchars($user['birthdate']) ?>" readonly>
+                <label class="add-product-label" for="birthdate">Birthdate:</label>
+                <input type="date" id="birthdate" name="birthdate" value="<?= htmlspecialchars($user['birthdate']) ?>" readonly>
               </div>
 
               <div class="input-box">
@@ -148,8 +148,8 @@ $user = mysqli_fetch_assoc($result);
               </div>
 
               <div class="input-box">
-                <label class="add-product-label" for="telnum">Phone Number:</label>
-                <input type="tel" id="telnum" value="<?= htmlspecialchars($user['phone_number']) ?>" readonly pattern="[0-9]{10,15}">
+                <label class="add-product-label" for="phone_number">Phone Number:</label>
+                <input type="tel" id="phone_number" name="phone_number" value="<?= htmlspecialchars($user['phone_number']) ?>" readonly pattern="[0-9]{10,15}">
               </div>
 
               <div class="update-password-container">
@@ -160,24 +160,34 @@ $user = mysqli_fetch_assoc($result);
 
               <div class="input-box">
                 <label class="add-product-label" for="password">Enter Password:</label>
-                <input type="password" id="password" readonly>
+                <input class="password-input" type="password" id="password" name="password" readonly>
+                <span class="toggle-password">
+                  <img class="eye-close" src="./images/eye-close-svgrepo-com.svg" style="display:inline;">
+                  <img class="eye-open" src="./images/eye-2-svgrepo-com.svg" style="display:none;">
+                </span>
               </div>
-
               <div class="input-box">
                 <label class="add-product-label" for="newpassword">New Password:</label>
-                <input type="password" id="newpassword" readonly>
+                <input class="password-input" type="password" id="newpassword" name="newpassword" readonly>
+                <span class="toggle-password">
+                  <img class="eye-close" src="./images/eye-close-svgrepo-com.svg" style="display:inline;">
+                  <img class="eye-open" src="./images/eye-2-svgrepo-com.svg" style="display:none;">
+                </span>
               </div>
-
               <div class="input-box">
                 <label class="add-product-label" for="confirmnewpassword" style="font-size: 22px;">Confirm New Password:</label>
-                <input type="password" id="confirmnewpassword" readonly>
+                <input class="password-input" type="password" id="confirmnewpassword" name="confirmnewpassword" readonly>
+                <span class="toggle-password">
+                  <img class="eye-close" src="./images/eye-close-svgrepo-com.svg" style="display:inline;">
+                  <img class="eye-open" src="./images/eye-2-svgrepo-com.svg" style="display:none;">
+                </span>
               </div>
 
             </div>
 
             <div class="edit-btn-container">
               <button id="editProfileBtn" class="profile-edit-btn" type="button">Edit</button>
-              <button id="updateProfileBtn" class="profile-edit-btn" type="button" style="display:none;">Update</button>
+              <button id="updateProfileBtn" class="profile-edit-btn" type="submit" style="display:none;">Update</button>
               <button id="cancelEditBtn" class="profile-edit-btn" type="button" style="display:none;">Cancel</button>
             </div>
           </form>
@@ -669,7 +679,7 @@ $user = mysqli_fetch_assoc($result);
 
     // EDIT PROFILE
     const profileFields = [
-      'username', 'firstname', 'middlename', 'lastname', 'email', 'bdate', 'address', 'telnum',
+      'username', 'firstname', 'middlename', 'lastname', 'email', 'birthdate', 'address', 'phone_number',
       'password', 'newpassword', 'confirmnewpassword'
     ];
     const originalValues = {};
@@ -679,12 +689,14 @@ $user = mysqli_fetch_assoc($result);
     const cancelBtn = document.getElementById('cancelEditBtn');
 
     profileFields.forEach(id => {
-      originalValues[id] = document.getElementById(id).value;
+      const el = document.getElementById(id);
+      if (el) originalValues[id] = el.value;
     });
 
     editBtn.addEventListener('click', function() {
       profileFields.forEach(id => {
-        document.getElementById(id).removeAttribute('readonly');
+        const el = document.getElementById(id);
+        if (el) el.removeAttribute('readonly');
       });
       editBtn.style.display = 'none';
       updateBtn.style.display = 'inline-block';
@@ -694,6 +706,7 @@ $user = mysqli_fetch_assoc($result);
     cancelBtn.addEventListener('click', function() {
       profileFields.forEach(id => {
         const field = document.getElementById(id);
+        if (!field) return;
         if (id === 'password' || id === 'newpassword' || id === 'confirmnewpassword') {
           field.value = '';
         } else {
@@ -722,22 +735,14 @@ $user = mysqli_fetch_assoc($result);
       const confirmNewPass = document.getElementById('confirmnewpassword').value;
 
       if (oldPass || newPass || confirmNewPass) {
-        // Validate new password
-        const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
         if (!oldPass) {
           alert('Enter your current password to change password.');
           return;
         }
-        if (!passwordPattern.test(newPass)) {
-          alert('New password must be at least 8 characters long and contain uppercase, lowercase, number, and special character.');
-          return;
-        }
-        if (newPass !== confirmNewPass) {
-          alert('New passwords do not match.');
-          return;
-        }
-        data.old_password = oldPass;
-        data.new_password = newPass;
+        // Don't check new password strength in JS, let PHP handle it!
+        data.password = oldPass;
+        data.newpassword = newPass;
+        data.confirmnewpassword = confirmNewPass;
       }
       // --- END PASSWORD CHECK CODE ---
 
@@ -764,6 +769,32 @@ $user = mysqli_fetch_assoc($result);
           }
         });
     });
+
+    // SHOW/HIDE PASSWORD FUNCTIONALITY
+    function setupPasswordToggle(span) {
+      const container = span.parentElement;
+      const input = container.querySelector('.password-input') || container.querySelector('input[type="password"]');
+      const eyeOpen = span.querySelector('.eye-open');
+      const eyeClose = span.querySelector('.eye-close');
+
+      function showPassword() {
+        input.type = 'text';
+        eyeOpen.style.display = 'inline';
+        eyeClose.style.display = 'none';
+      }
+
+      function hidePassword() {
+        input.type = 'password';
+        eyeOpen.style.display = 'none';
+        eyeClose.style.display = 'inline';
+      }
+
+      span.addEventListener('mousedown', showPassword);
+      span.addEventListener('mouseup', hidePassword);
+      span.addEventListener('mouseleave', hidePassword);
+    }
+
+    document.querySelectorAll('.toggle-password').forEach(setupPasswordToggle);
   </script>
 </body>
 

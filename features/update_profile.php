@@ -1,98 +1,81 @@
 <?php
-session_start();
-require_once '../db-connection.php';
-
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 header('Content-Type: application/json');
+session_start();
+require_once 'db-connection.php';
 
 if (!isset($_SESSION['username'])) {
     echo json_encode(['success' => false, 'message' => 'Not logged in.']);
     exit;
 }
 
-$username = $_SESSION['username'];
 $data = json_decode(file_get_contents('php://input'), true);
 
+$username = $_SESSION['username'];
+$query = "SELECT * FROM users WHERE username = '$username' LIMIT 1";
+$result = mysqli_query($conn, $query);
+$user = mysqli_fetch_assoc($result);
+
+if (!$user) {
+    echo json_encode(['success' => false, 'message' => 'User not found.']);
+    exit;
+}
+
 $fields = [
-    'username',
     'firstname',
     'middlename',
     'lastname',
     'email',
-    'bdate',
+    'birthdate',
     'address',
-    'telnum'
+    'phone_number'
 ];
+
 $updates = [];
-$changedFields = [];
-
-if (isset($data['username']) && $data['username'] !== $username) {
-    $check = mysqli_query($conn, "SELECT 1 FROM users WHERE username = '" . $conn->real_escape_string($data['username']) . "' AND username != '$username' LIMIT 1");
-    if (mysqli_num_rows($check) > 0) {
-        echo json_encode(['success' => false, 'message' => 'Username is already taken.']);
-        exit;
-    }
-    $updates[] = "username = '" . $conn->real_escape_string($data['username']) . "'";
-    $changedFields[] = 'username';
-}
-if (isset($data['email'])) {
-    $check = mysqli_query($conn, "SELECT 1 FROM users WHERE email = '" . $conn->real_escape_string($data['email']) . "' AND username != '$username' LIMIT 1");
-    if (mysqli_num_rows($check) > 0) {
-        echo json_encode(['success' => false, 'message' => 'Email is already taken.']);
-        exit;
-    }
-    $updates[] = "email = '" . $conn->real_escape_string($data['email']) . "'";
-    $changedFields[] = 'email';
-}
-if (isset($data['telnum'])) {
-    $check = mysqli_query($conn, "SELECT 1 FROM users WHERE phone_number = '" . $conn->real_escape_string($data['telnum']) . "' AND username != '$username' LIMIT 1");
-    if (mysqli_num_rows($check) > 0) {
-        echo json_encode(['success' => false, 'message' => 'Phone number is already taken.']);
-        exit;
-    }
-    $updates[] = "phone_number = '" . $conn->real_escape_string($data['telnum']) . "'";
-    $changedFields[] = 'phone_number';
-}
-
 foreach ($fields as $field) {
-    if (in_array($field, ['username', 'email', 'telnum'])) continue; // Already handled above
-    if (isset($data[$field])) {
-        $col = $field === 'bdate' ? 'birthdate' : $field;
-        $val = $conn->real_escape_string($data[$field]);
-        $updates[] = "$col = '$val'";
-        $changedFields[] = $col;
+    $new = trim($data[$field] ?? '');
+    if ($new !== $user[$field]) {
+        $safe = mysqli_real_escape_string($conn, $new);
+        $updates[] = "$field = '$safe'";
     }
 }
 
-if (!empty($data['new_password'])) {
-    if (empty($data['old_password'])) {
-        echo json_encode(['success' => false, 'message' => 'Current password is required to change password.']);
-        exit;
-    }
-    $userQ = mysqli_query($conn, "SELECT password_hash FROM users WHERE username = '$username'");
-    $user = mysqli_fetch_assoc($userQ);
-    if (!$user || !password_verify($data['old_password'], $user['password_hash'])) {
+// Password update logic
+if (
+    !empty($data['password']) ||
+    !empty($data['newpassword']) ||
+    !empty($data['confirmnewpassword'])
+) {
+    $oldPass = $data['password'] ?? '';
+    $newPass = $data['newpassword'] ?? '';
+    $confirmNewPass = $data['confirmnewpassword'] ?? '';
+
+    if (!password_verify($oldPass, $user['password_hash'])) {
         echo json_encode(['success' => false, 'message' => 'Current password is incorrect.']);
         exit;
     }
-    $newHash = password_hash($data['new_password'], PASSWORD_DEFAULT);
-    $updates[] = "password_hash = '$newHash'";
-    $changedFields[] = 'password_hash';
+    if ($newPass !== $confirmNewPass) {
+        echo json_encode(['success' => false, 'message' => 'New passwords do not match.']);
+        exit;
+    }
+    if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/', $newPass)) {
+        echo json_encode(['success' => false, 'message' => 'New password must be at least 8 characters long and contain uppercase, lowercase, number, and special character.']);
+        exit;
+    }
+    $hashed = password_hash($newPass, PASSWORD_DEFAULT);
+    $updates[] = "password_hash = '$hashed'";
 }
 
 if ($updates) {
     $updates[] = "updated_at = NOW()";
     $sql = "UPDATE users SET " . implode(', ', $updates) . " WHERE username = '$username'";
     if (mysqli_query($conn, $sql)) {
-        // Update session username if it was changed
-        if (in_array('username', $changedFields)) {
-            $_SESSION['username'] = $data['username'];
-        }
-        echo json_encode(['success' => true, 'updated_fields' => $changedFields, 'updated_at' => date('Y-m-d H:i:s')]);
+        echo json_encode(['success' => true]);
+        exit;
     } else {
-        echo json_encode(['success' => false, 'message' => 'Database update failed.']);
+        echo json_encode(['success' => false, 'message' => 'Failed to update profile: ' . mysqli_error($conn)]);
+        exit;
     }
+} else {
+    echo json_encode(['success' => true]);
+    exit;
 }

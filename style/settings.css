@@ -710,3 +710,28 @@ button img{
   background: #fff;
   color: #e74c3c;
 }
+
+.toggle-password {
+  cursor: pointer;
+  position: absolute;
+  right: 20px;  /* <-- move further left (adjust as needed) */
+  top: 50%;
+  transform: translateY(-50%);
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password img {
+  width: 30px;
+  height: 30px;
+}
+
+.input-box {
+  position: relative;
+}
+
+.password-input {
+  padding-right: 36px;
+}
