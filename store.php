@@ -1,6 +1,18 @@
 <?php
 session_start();
 $isLoggedIn = isset($_SESSION['username']);
+
+session_start();
+require_once './features/db-connection.php';
+
+$username = $_SESSION['username'];
+$query = "SELECT * FROM users WHERE username = '$username' LIMIT 1";
+$result = mysqli_query($conn, $query);
+$user = mysqli_fetch_assoc($result);
+
+$imagePath = (!empty($user['image']))
+  ? 'images/profiles/' . $user['image']
+  : './images/profile-circle-svgrepo-com.png';
 ?>
 
 <!DOCTYPE html>
@@ -11,6 +23,8 @@ $isLoggedIn = isset($_SESSION['username']);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans | Store</title>
   <link rel="stylesheet" href="style/store.css">
+  <link rel="stylesheet" href="style/profilePic.css">
+  <link rel="stylesheet" href="style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -27,12 +41,12 @@ $isLoggedIn = isset($_SESSION['username']);
 
     <div class="right-header">
       <a href="cart.php"><img src="images/SVGRepo_iconCarrier.png"></a>
-      <img class="profile" src="images/profile-circle-svgrepo-com.png">
+      <img class="profile" src="<?= htmlspecialchars($imagePath); ?>">
       <div class="sub-menu-wrap" id="subMenu">
         <div class="sub-menu">
           <div class="user-info">
-            <img src="./images/profile-circle-svgrepo-com.png" alt="profile">
-            <h3 id="userName">User123</h3>
+            <img class="profile-menu-img" src="<?= htmlspecialchars($imagePath); ?>" alt="profile">
+            <h3 id="userName"><?= htmlspecialchars($user['username']); ?></h3>
           </div>
           <hr>
           <div class="sub-menu-link" id="toBecomeSeller">
@@ -49,7 +63,7 @@ $isLoggedIn = isset($_SESSION['username']);
               <path
                 d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6zM432 480H80a31 31 0 01-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75 1.94 10.73-.68 21.34-7.18 29.11A31 31 0 01432 480z" />
             </svg>
-            <a class="sub-menu-text" href="settings.php">Settings</a>
+            <a class="sub-menu-text" id="settingsLink" href="#">Settings</a>
             <span>></span>
           </div>
 
@@ -516,7 +530,28 @@ $isLoggedIn = isset($_SESSION['username']);
     document.getElementById("loginPromptYes").addEventListener("click", function() {
       window.location.href = "homepage.html"; // or your login page
     });
+
+    // ROLE CHECKER
+    const userRole = <?= isset($user['role']) ? json_encode($user['role']) : 'null' ?>;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const settingsLink = document.getElementById("settingsLink");
+      if (settingsLink) {
+        settingsLink.addEventListener("click", function(e) {
+          e.preventDefault();
+          if (userRole === "buyer") {
+            window.location.href = "./user-handling/buyers/buyer_settings.php";
+          } else if (userRole === "seller") {
+            window.location.href = "./user-handling/sellers/seller_settings.php";
+          } else {
+            window.location.href = "settings.php";
+          }
+        });
+      }
+    });
   </script>
+
+
 </body>
 
 </html>

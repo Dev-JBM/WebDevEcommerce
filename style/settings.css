@@ -195,7 +195,7 @@ section{
   align-items: center;
   justify-content: center;
   background-color: #57473A;
-  padding: 0px 40px;
+  padding: 25px 40px;
   border-radius: 10px;
 }
 
@@ -671,11 +671,146 @@ button img{
   display: none;
 }
 
+/* --- Profile/Menu Side by Side --- */
+.profile-menu-wrapper {
+  display: flex;
+  align-items: stretch;
+
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.profile-container {
+  background: #73A1B1;
+  border-radius: 10px;
+  padding: 31.5px 40px 31.5px 40px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.menu-container {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+/* --- Edit Profile Pic --- */
+.userImg {
+  position: relative;
+  top: 0;
+}
+
+.userImg-pic {
+  width: 140px;
+  position: relative;
+  margin: auto;
+  text-align: center;
+}
+
+.userImg-pic img {
+  border-radius: 50%;
+  border: 8px solid #DCDCDC;
+  width: 125px;
+  height: 125px;
+  object-fit: cover;
+  background: #fff;
+}
+
+.userImg-pic .rightRound,
+.userImg-pic .leftRound {
+  position: absolute;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #00B4FF; /* for rightRound */
+  /* background: #ff4444; for leftRound (set in the HTML or override below) */
+  overflow: hidden;
+  padding: 0;
+}
+
+.userImg-pic .leftRound {
+  left: 0;
+  background: #ff4444;
+}
+
+.userImg-pic .rightRound {
+  right: 0;
+  background: #00B4FF;
+}
+
+/* Confirm button special position and color */
+#confirmPicBtn {
+  background: #00C851 !important;
+  right: -0.5px;
+}
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+  margin: 0 auto;
+  pointer-events: none;
+  position: static;
+}
+.userImg-pic .rightRound,
+.userImg-pic .leftRound {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  overflow: hidden;
+}
+
+.userImg-pic input[type="file"],
+.userImg-pic input[type="submit"] {
+  position: absolute;
+  transform: scale(2);
+  opacity: 0;
+  cursor: pointer;
+}
+
+.userImg-pic .pic-btn-label {
+  font-size: 12px;
+  color: #fff;
+  margin-top: 2px;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  pointer-events: none;
+}
+
+.userImg p {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
+  color: #444;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .profile-menu-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .profile-container {
+    margin-bottom: 20px;
+  }
+}
 
 /* EDIT. UPDATE, CANCEL BUTTONS */
 .edit-btn-container {
   display: flex;
-  gap: 1em;           /* Adds space between buttons */
+  gap: 1em;
   margin-top: 1.2em; 
 }
 

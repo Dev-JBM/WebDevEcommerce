@@ -22,8 +22,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (password_verify($password, $user['password_hash'])) {
             $_SESSION['username'] = $user['username'];
-            header("Location: ../store.php");
-            exit;
+            // Role-based redirection
+            if (isset($user['role'])) {
+                if ($user['role'] === 'admin') {
+                    header("Location: ../user-handling/admin/admin.php");
+                    exit;
+                } elseif ($user['role'] === 'buyer' || $user['role'] === 'seller') {
+                    header("Location: ../store.php");
+                    exit;
+                } else {
+                    $message = "Unknown user role.";
+                }
+            } else {
+                $message = "User role not set.";
+            }
         } else {
             $message = "Invalid password.";
         }
@@ -34,23 +46,3 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $conn->close();
 }
 ?>
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <script>
-        const message = "<?= htmlspecialchars($message) ?>";
-        if (message) {
-            alert(message);
-            setTimeout(() => {
-                window.location.href = "../homepage.html";
-            }, 100);
-        }
-    </script>
-</head>
-
-<body>
-</body>
-
-</html>

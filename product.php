@@ -1,12 +1,34 @@
+<?php
+session_start();
+require_once './features/db-connection.php';
+
+if (!isset($_SESSION['username'])) {
+  header("Location: homepage.html");
+  exit;
+}
+
+$username = $_SESSION['username'];
+$query = "SELECT * FROM users WHERE username = '$username' LIMIT 1";
+$result = mysqli_query($conn, $query);
+$user = mysqli_fetch_assoc($result);
+
+$imagePath = (!empty($user['image']))
+  ? 'images/profiles/' . $user['image']
+  : './images/profile-circle-svgrepo-com.png';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wear Dyans | Product</title>
-    <link rel="stylesheet" href="style/product.css">
-    <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
+  <title>Wear Dyans | Product</title>
+  <link rel="stylesheet" href="style/product.css">
+  <link rel="stylesheet" href="style/profilePic.css">
+  <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
+
 <body>
   <main>
     <header class="header">
@@ -44,7 +66,7 @@
                 <path
                   d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6zM432 480H80a31 31 0 01-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75 1.94 10.73-.68 21.34-7.18 29.11A31 31 0 01432 480z" />
               </svg>
-              <a class="sub-menu-text" href="settings.html">Settings</a>
+              <a class="sub-menu-text" id="settingsLink" href="#">Settings</a>
               <span>></span>
             </div>
 
@@ -77,7 +99,7 @@
                 <div class="rating">5.0
                   <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5"/>
+                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
                     </defs>
                     <use href="#star" x="0" y="5" />
                     <use href="#star" x="25" y="5" />
@@ -87,7 +109,7 @@
                   </svg>
                 </div>
                 <p class="qty-rating">
-                  <span class="qty-number">| 2 </span>Ratings 
+                  <span class="qty-number">| 2 </span>Ratings
                   <span class="sales-number">| 3 </span>Sold
                 </p>
               </div>
@@ -115,39 +137,39 @@
               </div>
 
               <div class="colors-container">
-              <div class="colors">
-                <div class="color-1"></div>
-                <div class="color-2"></div>
-                <div class="color-3"></div>
-                <div class="color-4"></div>
-                <div class="color-5"></div>
+                <div class="colors">
+                  <div class="color-1"></div>
+                  <div class="color-2"></div>
+                  <div class="color-3"></div>
+                  <div class="color-4"></div>
+                  <div class="color-5"></div>
+                </div>
+                <p class="text-colors">Color: <span class="color-picked">Green</span></p>
               </div>
-              <p class="text-colors">Color: <span class="color-picked">Green</span></p>
-            </div>
             </div>
 
-              <div class="product-qty-container">
-                <div class="product-qty">
-                  <img src="images/minus-svgrepo-com.svg">
-                  <p class="qty-text">1</p>
-                  <img src="images/add-plus-svgrepo-com.svg">
-                </div>
-                <p class="available-text"><span>20</span> pieces available</p>
+            <div class="product-qty-container">
+              <div class="product-qty">
+                <img src="images/minus-svgrepo-com.svg">
+                <p class="qty-text">1</p>
+                <img src="images/add-plus-svgrepo-com.svg">
               </div>
+              <p class="available-text"><span>20</span> pieces available</p>
+            </div>
 
-              <div class="btns-product-right-container">
-                <div>
-                  <button class="btn-cart">
-                    <img src="images/SVGRepo_iconCarrier_brown.png">
-                    Add to Cart
-                  </button>
-                </div>
-                <div>
-                  <button class="btn-buy">
-                    Buy Now
-                  </button>
-                </div>
+            <div class="btns-product-right-container">
+              <div>
+                <button class="btn-cart">
+                  <img src="images/SVGRepo_iconCarrier_brown.png">
+                  Add to Cart
+                </button>
               </div>
+              <div>
+                <button class="btn-buy">
+                  Buy Now
+                </button>
+              </div>
+            </div>
           </div>
 
 
@@ -157,7 +179,7 @@
             <div class="title-description">
               <p>Description</p>
             </div>
-  
+
             <div class="description">
               <p>-The body is made of a fabric with a chunky feel.</p>
               <p>-Piping at the cuff and hem prevents wind from entering and keeps warmth in.</p>
@@ -214,7 +236,7 @@
                     <p>Avg. Rating:</p>
                     <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
                       <defs>
-                        <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5"/>
+                        <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
                       </defs>
                       <use href="#star" x="0" y="5" />
                       <use href="#star" x="25" y="5" />
@@ -244,13 +266,13 @@
                       </div>
                     </div>
                   </div>
-                </div>                 
+                </div>
               </div>
 
               <div class="feedback-box">
                 <div class="feedback-top-container">
                   <div class="profile-box">
-                    
+
                     <div class="profile-pic">
                       <img src="./images/profile-circle-svgrepo-com.png">
                     </div>
@@ -258,29 +280,29 @@
                     <div class="name-container">
                       <p class="name">user123</p>
                       <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
-                          <defs>
-                            <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5"/>
-                          </defs>
-                          <use href="#star" x="0" y="5" />
-                          <use href="#star" x="25" y="5" />
-                          <use href="#star" x="50" y="5" />
-                          <use href="#star" x="75" y="5" />
-                          <use href="#star" x="100" y="5" />
-                        </svg>
+                        <defs>
+                          <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
+                        </defs>
+                        <use href="#star" x="0" y="5" />
+                        <use href="#star" x="25" y="5" />
+                        <use href="#star" x="50" y="5" />
+                        <use href="#star" x="75" y="5" />
+                        <use href="#star" x="100" y="5" />
+                      </svg>
                     </div>
                   </div>
 
                   <div class="date">
                     <p>3/22/2025</p>
                   </div>
-                  
+
                 </div>
 
-                <div class="feedback-bottom-container">     
+                <div class="feedback-bottom-container">
                   <p class="variation-feedback">Variation: <span class="feedback-size">M</span>, <span class="feedback-color">Green</span></p>
                   <p class="comment">This fleece jacket is both stylish and functional. The bicolor design adds a trendy touch, making it easy to pair with different outfits. The material is soft, warm, and perfect for chilly weather. The fit is true to size, and the zipper feels sturdy. Great for casual wear or layering in colder months. Highly recommended!</p>
                 </div>
-                  
+
               </div>
             </div>
           </div>
@@ -293,10 +315,11 @@
   <script>
     // TOGGLE MENU
     let subMenu = document.getElementById("subMenu");
+
     function toggleMenu() {
       subMenu.classList.toggle("open-menu");
     }
-    
+
     // Sort Select
     const select = document.getElementById("filter");
     const arrowDown = document.querySelector(".arrow-down");
@@ -304,21 +327,21 @@
 
     let isOpen = false;
 
-      
+
     select.addEventListener("click", () => {
       isOpen = !isOpen;
       arrowDown.style.display = isOpen ? "none" : "inline";
       arrowUp.style.display = isOpen ? "inline" : "none";
     });
 
-      
+
     select.addEventListener("blur", () => {
       isOpen = false;
       arrowDown.style.display = "inline";
       arrowUp.style.display = "none";
     });
 
-      
+
     arrowUp.addEventListener("click", (e) => {
       e.preventDefault();
       isOpen = false;
@@ -340,6 +363,26 @@
       asc.style.display = "none";
       desc.style.display = "inline";
     });
+
+    // ROLE CHECKER
+    const userRole = <?= isset($user['role']) ? json_encode($user['role']) : 'null' ?>;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const settingsLink = document.getElementById("settingsLink");
+      if (settingsLink) {
+        settingsLink.addEventListener("click", function(e) {
+          e.preventDefault();
+          if (userRole === "buyer") {
+            window.location.href = "./user-handling/buyers/buyer_settings.php";
+          } else if (userRole === "seller") {
+            window.location.href = "./user-handling/sellers/seller_settings.php";
+          } else {
+            window.location.href = "settings.php";
+          }
+        });
+      }
+    });
   </script>
 </body>
+
 </html>
