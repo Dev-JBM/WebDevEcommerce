@@ -73,7 +73,7 @@ $imagePath = (!empty($user['image']))
                 <path
                   d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6zM432 480H80a31 31 0 01-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75 1.94 10.73-.68 21.34-7.18 29.11A31 31 0 01432 480z" />
               </svg>
-              <a class="sub-menu-text" href="buyer_to_seller.php">Become a Seller</a>
+              <a class="sub-menu-text" href="../../store.php">Back to shopping</a>
               <span>></span>
             </div>
 
@@ -120,25 +120,17 @@ $imagePath = (!empty($user['image']))
               <img src="../../images/person-male-svgrepo-com.svg">
               My Account
             </button>
-            <button type="button" class="my-products-btn">
-              <img src="../../images/product-svgrepo-com.svg">
-              My Products
-            </button>
-            <button type="button" class="add-product-btn">
-              <img src="../../images/add-square-svgrepo-com.svg">
-              Add Product
-            </button>
-            <hr>
-            <hr>
-            <hr>
             <button type="button" class="orders-btn">
               <img src="../../images/order-svgrepo-com.svg">
               Orders
             </button>
-            <button type="button" class="earnings-btn">
-              <img src="../../images/money-svgrepo-com.svg">
-              Earnings
+            <button type="button" class="add-product-btn">
+              <img src="../../images/add-square-svgrepo-com.svg">
+              Become a Seller
             </button>
+            <hr>
+            <hr>
+            <hr>
             <button type="button" class="logout-btn">
               <img src="../../images/logout-svgrepo-com.svg">
               Logout
@@ -274,132 +266,47 @@ $imagePath = (!empty($user['image']))
 
       <div class="add-product">
         <div class="title">
-          <p>Add Product</p>
+          <p>Become a Seller</p>
         </div>
 
         <div class="add-product-content">
-          <form action="">
+          <form id="becomeSellerForm" enctype="multipart/form-data" method="post" action="buyer_to_seller.php">
             <div class="inputs-container">
               <div class="input-box">
-                <label class="add-product-label" for="productName">Product Name:</label>
-                <input type="text" id="productName">
+                <label class="add-product-label" for="fullname">Enter Fullname:</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Firstname Middlename Lastname">
               </div>
-
               <div class="input-box">
-                <label class="add-product-label" for="NumberStock">Number of Stock:</label>
-                <input type="text" id="NumberStock">
+                <label class="add-product-label" for="business_name" style="font-size: 1.5em;">Enter Business Name:</label>
+                <input type="text" id="business_name" name="business_name">
               </div>
-
               <div class="input-box">
-                <label class="add-product-label" for="price">Price:</label>
-                <input type="text" id="price">
+                <label class="add-product-label" for="phone_number" style="font-size: 1.5em;">Enter Phone Number:</label>
+                <input type="text" id="phone_number" name="phone_number">
               </div>
-
-              <div class="select-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
-                <label class="add-product-label" for="category">Gender:</label>
-                <select id="gender" name="gender">
-                  <option value="" selected disabled hidden></option>
-                  <option value="Men">Men</option>
-                  <option value="Women">Women</option>
-                  <option value="Unisex">Unisex</option>
-                </select>
+              <div class="input-box">
+                <label class="add-product-label" for="business_address" style="font-size: 1.4em;">Enter Business Address:</label>
+                <input type="text" id="business_address" name="business_address">
               </div>
-
-              <div class="select-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
-                <label class="add-product-label" for="category">Category:</label>
-                <select id="category" name="category">
-                  <option value="" selected disabled hidden></option>
-                  <option value="Clothes">Clothes</option>
-                  <option value="Accessories">Accessories</option>
-                </select>
-              </div>
-
-              <div class="select-container" id="clothesType-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
-                <label class="add-product-label" for="clothesType">Type:</label>
-                <select id="clothesType" name="clothesType">
-                  <option value="" selected disabled hidden></option>
-                  <option value="T-shirt">T-shirt</option>
-                  <option value="Polo Shirt">Polo Shirt</option>
-                  <option value="Polo">Polo</option>
-                  <option value="Long Sleeve">Long Sleeve</option>
-                  <option value="Jacket">Jacket</option>
-                  <option value="Hoodie">Hoodie</option>
-                  <option value="Pants">Pants</option>
-                  <option value="Short">Short</option>
-                  <option value="Underwear">Underwear</option>
-                  <option value="Sock">Sock</option>
-                </select>
-              </div>
-
-              <div class="select-container" id="accessoriesType-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
-                <label class="add-product-label" for="accessoriesType">Type:</label>
-                <select id="accessoriesType" name="accessoriesType">
-                  <option value="" selected disabled hidden></option>
-                  <option value="Watch">Watch</option>
-                  <option value="Glasses">Glasses</option>
-                  <option value="Earring">Earring</option>
-                  <option value="Bracelet">Bracelet</option>
-                  <option value="Ring">Ring</option>
-                  <option value="Hat">Hat</option>
-                  <option value="Necklace">Necklace</option>
-                </select>
-              </div>
-
-              <div class="select-container">
-                <p class="add-product-label">Sizes Available:</p>
-                <div class="size-checkboxes">
-                  <label><input type="checkbox" name="size[]" value="S"> S</label>
-                  <label><input type="checkbox" name="size[]" value="M"> M</label>
-                  <label><input type="checkbox" name="size[]" value="L"> L</label>
-                  <label><input type="checkbox" name="size[]" value="XL"> XL</label>
-                  <label><input type="checkbox" name="size[]" value="2XL"> 2XL</label>
-                  <label><input type="checkbox" name="size[]" value="3XL"> 3XL</label>
-                  <label><input type="checkbox" name="size[]" value="4XL"> 4XL</label>
-                </div>
-              </div>
-
-              <div class="input-color-box">
-                <div class="color-input-wrap">
-                  <label class="add-product-label" for="colorInput">Colors Available:</label>
-                  <div class="color-input-container">
-                    <input class="color-input" type="text" id="colorInput" placeholder="Enter a color (#HEXCODE)">
-                    <button type="button" class="add-color-button" type="button" onclick="addColor()">Add</button>
-                  </div>
-                </div>
-
-                <div class="color-list" id="colorList"></div>
-              </div>
-
               <div class="input-image-box">
                 <div class="input-image-title">
-                  <p>Upload Product Image:</p>
+                  <p>Upload a Valid ID image or PDF: (max 5MB file size)</p>
                 </div>
                 <div class="input-upload-box">
                   <div class="upload-box" id="dropZone">
                     <div class="upload-text" id="uploadText">
                       Click to choose or<br>drag a file<br>
-                      <small>(max 5mb file size)</small>
+                      <small>(JPG, JPEG, PNG, PDF, max 5MB)</small>
                     </div>
-                    <input type="file" id="fileInput" accept=".jpg, .jpeg, .png">
+                    <input type="file" id="fileInput" name="valid_id_file" accept=".jpg, .jpeg, .png, .pdf">
                     <img id="previewImage" class="preview-img hidden" alt="Image Preview">
                   </div>
-
-                  <button type="button" id="removeButton" class="remove-btn hidden" type="button">Remove</button>
+                  <button type="button" id="removeButton" class="remove-btn hidden">Remove</button>
                 </div>
               </div>
-
             </div>
-
             <div class="add-btn-container">
-              <input class="add-product-add-btn" type="submit" value="Add Product">
+              <input class="add-product-add-btn" type="submit" value="Submit">
             </div>
           </form>
         </div>
@@ -652,65 +559,59 @@ $imagePath = (!empty($user['image']))
       return luminance > 186; // threshold for light color
     }
 
-    // UPLOAD IMAGE
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('fileInput');
     const previewImage = document.getElementById('previewImage');
     const uploadText = document.getElementById('uploadText');
     const removeButton = document.getElementById('removeButton');
 
-    // Open file dialog when clicked
     dropZone.addEventListener('click', () => fileInput.click());
-
-    // File selected
     fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
-
-    // Dragging over
     dropZone.addEventListener('dragover', (e) => {
       e.preventDefault();
       dropZone.classList.add('hover');
     });
-
-    // Drag leave
     dropZone.addEventListener('dragleave', () => {
       dropZone.classList.remove('hover');
     });
-
-    // File dropped
     dropZone.addEventListener('drop', (e) => {
       e.preventDefault();
       dropZone.classList.remove('hover');
       const file = e.dataTransfer.files[0];
+      fileInput.files = e.dataTransfer.files;
       handleFile(file);
     });
 
-    // Handle valid file
     function handleFile(file) {
       if (!file) return;
-
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
       if (!allowedTypes.includes(file.type)) {
-        alert('Only JPG, JPEG, and PNG files are allowed.');
+        alert('Unsupported file type. Only JPG, JPEG, PNG, and PDF are allowed.');
+        fileInput.value = '';
         return;
       }
-
       if (file.size > 5 * 1024 * 1024) {
-        alert('File size must be less than 5MB.');
+        alert('File size must not exceed 5MB.');
+        fileInput.value = '';
         return;
       }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        previewImage.src = e.target.result;
+      if (file.type === 'application/pdf') {
+        previewImage.src = '../../images/pdf-icon.png'; // Use a PDF icon in your images folder
         previewImage.classList.remove('hidden');
         uploadText.classList.add('hidden');
         removeButton.classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImage.src = e.target.result;
+          previewImage.classList.remove('hidden');
+          uploadText.classList.add('hidden');
+          removeButton.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
-    // Remove image and reset
     removeButton.addEventListener('click', () => {
       previewImage.src = '';
       previewImage.classList.add('hidden');
@@ -874,6 +775,46 @@ $imagePath = (!empty($user['image']))
     }
 
     document.querySelectorAll('.toggle-password').forEach(setupPasswordToggle);
+
+    // BECOME A SELLER FORM
+    document.getElementById('becomeSellerForm').addEventListener('submit', function(e) {
+
+      const userFullname = <?= json_encode(trim($user['firstname'] . ' ' . $user['middlename'] . ' ' . $user['lastname'])) ?>;
+      const userPhone = <?= json_encode($user['phone_number']) ?>;
+
+      const fullname = document.getElementById('fullname').value.trim();
+      const businessName = document.getElementById('business_name').value.trim();
+      const phoneNumber = document.getElementById('phone_number').value.trim();
+      const businessAddress = document.getElementById('business_address').value.trim();
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!fullname || !businessName || !phoneNumber || !businessAddress || !file) {
+        alert('Please fill all fields and upload a valid ID file.');
+        e.preventDefault();
+        return false;
+      }
+
+      if (fullname !== userFullname || phoneNumber !== userPhone) {
+        alert("Fullname and phone number must match your account information.");
+        e.preventDefault();
+        return false;
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Unsupported file type. Only JPG, JPEG, PNG, and PDF are allowed.');
+        e.preventDefault();
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size must not exceed 5MB.');
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    // DRAG AND DROP FOR BECOME A SELLER
   </script>
 
   <!-- FOR LOGOUT OPTION -->
