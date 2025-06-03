@@ -131,7 +131,7 @@ $imagePath = (!empty($user['image']))
             <hr>
             <hr>
             <hr>
-            <button type="button" class="logout-btn">
+            <button type="button" class="logout-btn" id="logoutMenu">
               <img src="../../images/logout-svgrepo-com.svg">
               Logout
             </button>
@@ -834,11 +834,23 @@ $imagePath = (!empty($user['image']))
     </div>
   </div>
   <script>
-    // Show modal on logout click
-    document.getElementById("logout").addEventListener("click", function(e) {
-      e.preventDefault();
-      document.getElementById("logoutModal").style.display = "flex";
-    });
+    // Show modal on logout click (sub-menu and menu-container)
+    const logoutBtn = document.getElementById("logout");
+    const logoutMenuBtn = document.getElementById("logoutMenu");
+    const logoutModal = document.getElementById("logoutModal");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        logoutModal.style.display = "flex";
+      });
+    }
+    if (logoutMenuBtn) {
+      logoutMenuBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        logoutModal.style.display = "flex";
+      });
+    }
 
     // Hide modal on "No"
     document.getElementById("logoutNo").addEventListener("click", function() {
