@@ -4,7 +4,7 @@ session_start();
 require_once '../../features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
-  header("Location: homepage.html");
+  header("Location: ../../homepage.php");
   exit;
 }
 

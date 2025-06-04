@@ -4,7 +4,7 @@ session_start();
 require_once '../../features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
-  header("Location: homepage.html");
+  header("Location: ../../homepage.php");
   exit;
 }
 
@@ -257,29 +257,42 @@ $imagePath = (!empty($user['image']))
             <thead>
               <tr>
                 <th>ID</th>
+                <th>Created_At</th>
+                <th>Updated_At</th>
                 <th>Product Name</th>
                 <th>Product Image</th>
                 <th>Price</th>
                 <th>Stock</th>
-                <th></th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
 
-              <?php while ($row = $result->fetch_assoc()): ?>
+              <?php if ($result->num_rows === 0): ?>
                 <tr>
-                  <td class="id-input"><?= htmlspecialchars($row['product_id']) ?></td>
-                  <td class="id-input"><?= htmlspecialchars($row['name']) ?></td>
-                  <td class="last-product-image">
-                    <img class="my-product-product-image" src="../../images/products/<?= htmlspecialchars($row['image_path']) ?>" alt="image">
-                  </td>
-                  <td class="id-input">PHP <?= number_format($row['price'], 2) ?></td>
-                  <td class="id-input"><?= htmlspecialchars($row['stock_quantity']) ?></td>
-                  <td class="id-input">
-                    <button type="button" class="remove-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Remove</button>
+                  <td class="id-input" colspan="8" style="text-align:center; font-size:1.2em; color:#888;">
+                    No products to display.
                   </td>
                 </tr>
-              <?php endwhile; ?>
+              <?php else: ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                  <tr>
+                    <td class="id-input"><?= htmlspecialchars($row['product_id']) ?></td>
+                    <td class="id-input"><?= htmlspecialchars($row['created_at']) ?></td>
+                    <td class="id-input"><?= htmlspecialchars($row['updated_at']) ?></td>
+                    <td class="id-input"><?= htmlspecialchars($row['name']) ?></td>
+                    <td class="last-product-image">
+                      <img class="my-product-product-image" src="../../images/products/<?= htmlspecialchars($row['image_path']) ?>" alt="image">
+                    </td>
+                    <td class="id-input">PHP <?= number_format($row['price'], 2) ?></td>
+                    <td class="id-input"><?= htmlspecialchars($row['stock_quantity']) ?></td>
+                    <td class="id-input">
+                      <button type="button" class="edit-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Edit</button>
+                      <button type="button" class="remove-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Remove</button>
+                    </td>
+                  </tr>
+                <?php endwhile; ?>
+              <?php endif; ?>
 
             </tbody>
           </table>
@@ -919,6 +932,16 @@ $imagePath = (!empty($user['image']))
       if (confirm('Are you sure you want to add this product?')) {
         this.submit(); // Only submit if confirmed
       }
+    });
+
+    // PRODUCT REMOVING
+    document.querySelectorAll('.remove-button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const productId = this.getAttribute('data-product-id');
+        if (confirm('Are you sure you want to remove this product?')) {
+          window.location.href = '../../user-handling/sellers/remove-product.php?id=' + encodeURIComponent(productId);
+        }
+      });
     });
   </script>
 

@@ -31,7 +31,7 @@ $imagePath = (!empty($user['image']))
 <body>
   <header class="header">
     <div class="left-header">
-      <a href="store.php">Wear Dyans</a>
+      <a href="homepage.php">Wear Dyans</a>
     </div>
 
     <div class="search-bar">
@@ -519,7 +519,7 @@ $imagePath = (!empty($user['image']))
       document.getElementById("loginPromptModal").style.display = "none";
     });
     document.getElementById("loginPromptYes").addEventListener("click", function() {
-      window.location.href = "homepage.html"; // or your login page
+      window.location.href = "homepage.php"; // or your login page
     });
 
     // ROLE CHECKER

@@ -79,7 +79,7 @@ $conn->close();
         const message = "<?= htmlspecialchars($message) ?>";
         alert(message);
         setTimeout(() => {
-            window.location.href = "../homepage.html";
+            window.location.href = "../homepage.php";
         }, 100);
     </script>
 </head>
