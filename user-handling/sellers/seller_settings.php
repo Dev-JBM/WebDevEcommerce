@@ -242,11 +242,22 @@ $imagePath = (!empty($user['image']))
           <p>My Products</p>
         </div>
 
+        <?php
+        // Get seller_id from the logged-in user
+        $seller_id = $user['user_id'];
+        $query = "SELECT * FROM products WHERE seller_id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $seller_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        ?>
+
         <div class="my-products-content">
           <table>
             <thead>
               <tr>
                 <th>ID</th>
+                <th>Product Name</th>
                 <th>Product Image</th>
                 <th>Price</th>
                 <th>Stock</th>
@@ -255,17 +266,20 @@ $imagePath = (!empty($user['image']))
             </thead>
             <tbody>
 
-              <tr>
-                <td class="id-input">123</td>
-                <td class="last-product-image">
-                  <img class="my-product-product-image" src="../../images/about-title-bg.png" alt="image">
-                </td>
-                <td class="id-input">PHP 1200.00</td>
-                <td class="id-input">35</td>
-                <td class="id-input">
-                  <button type="button" class="remove-button">Remove</button>
-                </td>
-              </tr>
+              <?php while ($row = $result->fetch_assoc()): ?>
+                <tr>
+                  <td class="id-input"><?= htmlspecialchars($row['product_id']) ?></td>
+                  <td class="id-input"><?= htmlspecialchars($row['name']) ?></td>
+                  <td class="last-product-image">
+                    <img class="my-product-product-image" src="../../images/products/<?= htmlspecialchars($row['image_path']) ?>" alt="image">
+                  </td>
+                  <td class="id-input">PHP <?= number_format($row['price'], 2) ?></td>
+                  <td class="id-input"><?= htmlspecialchars($row['stock_quantity']) ?></td>
+                  <td class="id-input">
+                    <button type="button" class="remove-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Remove</button>
+                  </td>
+                </tr>
+              <?php endwhile; ?>
 
             </tbody>
           </table>
@@ -278,21 +292,27 @@ $imagePath = (!empty($user['image']))
         </div>
 
         <div class="add-product-content">
-          <form action="">
+          <form id="addProductForm" enctype="multipart/form-data" method="post" action="../../user-handling/sellers/add-product.php">
+            <input type="hidden" name="seller_id" value="<?= htmlspecialchars($user['user_id']) ?>">
             <div class="inputs-container">
               <div class="input-box">
                 <label class="add-product-label" for="productName">Product Name:</label>
-                <input type="text" id="productName">
+                <input type="text" id="productName" name="productName" required>
+              </div>
+
+              <div class="input-box">
+                <label class="add-product-label" for="description">Product Description:</label>
+                <textarea id="description" name="description" class="add-product-input" rows="3" required></textarea>
               </div>
 
               <div class="input-box">
                 <label class="add-product-label" for="NumberStock">Number of Stock:</label>
-                <input type="text" id="NumberStock">
+                <input type="text" id="NumberStock" name="NumberStock" required>
               </div>
 
               <div class="input-box">
                 <label class="add-product-label" for="price">Price:</label>
-                <input type="text" id="price">
+                <input type="text" id="price" name="price" required>
               </div>
 
               <div class="select-container">
@@ -388,7 +408,7 @@ $imagePath = (!empty($user['image']))
                       Click to choose or<br>drag a file<br>
                       <small>(max 5mb file size)</small>
                     </div>
-                    <input type="file" id="fileInput" accept=".jpg, .jpeg, .png">
+                    <input type="file" id="fileInput" name="fileInput" accept=".jpg, .jpeg, .png" required>
                     <img id="previewImage" class="preview-img hidden" alt="Image Preview">
                   </div>
 
@@ -632,7 +652,7 @@ $imagePath = (!empty($user['image']))
           label.style.color = 'black';
         }
 
-        label.appendChild(hidden);
+        document.getElementById('addProductForm').appendChild(hidden);
         list.appendChild(label);
         input.value = '';
       }
@@ -799,6 +819,11 @@ $imagePath = (!empty($user['image']))
     });
 
     updateBtn.addEventListener('click', function() {
+      // Ask for confirmation before updating
+      if (!confirm('Are you sure you want to update your profile?')) {
+        return;
+      }
+
       const data = {};
       profileFields.forEach(id => {
         const el = document.getElementById(id);
@@ -807,7 +832,6 @@ $imagePath = (!empty($user['image']))
       });
 
       // Password logic here..
-
       // --- PLACE THE PASSWORD CHECK CODE HERE ---
       const oldPass = document.getElementById('password').value;
       const newPass = document.getElementById('newpassword').value;
@@ -818,14 +842,14 @@ $imagePath = (!empty($user['image']))
           alert('Enter your current password to change password.');
           return;
         }
-        // Don't check new password strength in JS, let PHP handle it!
+
         data.password = oldPass;
         data.newpassword = newPass;
         data.confirmnewpassword = confirmNewPass;
       }
       // --- END PASSWORD CHECK CODE ---
 
-      fetch('features/update_profile.php', {
+      fetch('../../features/update_profile.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -874,6 +898,28 @@ $imagePath = (!empty($user['image']))
     }
 
     document.querySelectorAll('.toggle-password').forEach(setupPasswordToggle);
+
+    // PRODUCT ADDING
+    document.getElementById('addProductForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Always prevent default first
+
+      const name = document.getElementById('productName').value.trim();
+      const price = document.getElementById('price').value.trim();
+      const stock = document.getElementById('NumberStock').value.trim();
+      const file = document.getElementById('fileInput').files[0];
+      if (!name || !price || !stock || !file) {
+        alert('Please fill all required fields and upload a product image.');
+        return false;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Product image must be less than 5MB.');
+        return false;
+      }
+      // Add confirmation before submitting
+      if (confirm('Are you sure you want to add this product?')) {
+        this.submit(); // Only submit if confirmed
+      }
+    });
   </script>
 
   <!-- FOR LOGOUT OPTION -->

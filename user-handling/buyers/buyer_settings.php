@@ -699,7 +699,14 @@ $imagePath = (!empty($user['image']))
       cancelBtn.style.display = 'none';
     });
 
+    // ...existing code...
+
     updateBtn.addEventListener('click', function() {
+      // Ask for confirmation before updating
+      if (!confirm('Are you sure you want to update your profile?')) {
+        return; // Do not proceed if user cancels
+      }
+
       const data = {};
       profileFields.forEach(id => {
         const el = document.getElementById(id);
@@ -708,7 +715,6 @@ $imagePath = (!empty($user['image']))
       });
 
       // Password logic here..
-
       // --- PLACE THE PASSWORD CHECK CODE HERE ---
       const oldPass = document.getElementById('password').value;
       const newPass = document.getElementById('newpassword').value;
@@ -726,7 +732,7 @@ $imagePath = (!empty($user['image']))
       }
       // --- END PASSWORD CHECK CODE ---
 
-      fetch('features/update_profile.php', {
+      fetch('../../features/update_profile.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -749,6 +755,8 @@ $imagePath = (!empty($user['image']))
           }
         });
     });
+
+    // ...existing code...
 
     // SHOW/HIDE PASSWORD FUNCTIONALITY
     function setupPasswordToggle(span) {

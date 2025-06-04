@@ -46,6 +46,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $updateRole->execute();
     $updateRole->close();
 
+    // Get user_id for seller_profiles
+    $getUserId = $conn->prepare("SELECT user_id FROM users WHERE username = ?");
+    $getUserId->bind_param("s", $username);
+    $getUserId->execute();
+    $getUserId->bind_result($user_id);
+    $getUserId->fetch();
+    $getUserId->close();
+
+    // Check if already in seller_profiles
+    $check = $conn->prepare("SELECT seller_id FROM seller_profiles WHERE seller_id = ?");
+    $check->bind_param("i", $user_id);
+    $check->execute();
+    $check->store_result();
+
+    if ($check->num_rows === 0) {
+        // Insert new seller profile
+        $insert = $conn->prepare("INSERT INTO seller_profiles (seller_id, shop_name, business_address, phone_number, valid_id_image_path) VALUES (?, ?, ?, ?, ?)");
+        $insert->bind_param("issss", $user_id, $business_name, $business_address, $phone_number, $fileName);
+        $insert->execute();
+        $insert->close();
+    }
+    $check->close();
+
     echo "<script>alert('Application submitted successfully! Your account is now a seller.');window.location.href='../../store.php';</script>";
     exit;
 }

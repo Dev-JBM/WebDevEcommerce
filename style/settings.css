@@ -1,13 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter&family=Podkova&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter&family=Podkova&display=swap");
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   font-family: Inter, sans-serif;
 }
 
-
 body {
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -33,7 +34,7 @@ p {
   padding: 0px 40px 0px 40px;
 }
 
-.left-header a{
+.left-header a {
   color: inherit;
   font-family: Podkova;
   font-size: 50px;
@@ -67,7 +68,8 @@ p {
   border-radius: 10px;
   padding: 20px;
   margin: 10px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
 }
 
 .user-info {
@@ -112,7 +114,7 @@ p {
   margin-right: 15px;
 }
 
-.sub-menu-text{
+.sub-menu-text {
   color: inherit;
   width: 100%;
   text-decoration: none;
@@ -127,7 +129,7 @@ p {
   transform: translateX(5px);
 }
 
-.sub-menu-text:hover{
+.sub-menu-text:hover {
   font-weight: bold;
 }
 
@@ -137,28 +139,28 @@ p {
   cursor: pointer;
 }
 
-main{
+main {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-section{
+section {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 1250px;
 }
 
-.top-part{
+.top-part {
   margin-top: 40px;
   display: flex;
   height: 300px;
   width: 100%;
 }
 
-.profile-container{
-  background-color: #73A1B1;
+.profile-container {
+  background-color: #73a1b1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -167,17 +169,17 @@ section{
   border-radius: 10px;
 }
 
-.profile-container img{
+.profile-container img {
   width: 150px;
   margin-top: 20px;
 }
 
-.username-profile-container{
+.username-profile-container {
   color: white;
   font-size: 2em;
 }
 
-.profile-pic-edit-btn{
+.profile-pic-edit-btn {
   background-color: #708658;
   color: white;
   border: none;
@@ -189,12 +191,12 @@ section{
   cursor: pointer;
 }
 
-.menu-container{
+.menu-container {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: #57473A;
+  background-color: #57473a;
   padding: 25px 40px;
   border-radius: 10px;
 }
@@ -210,7 +212,7 @@ section{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #F0E9E1;
+  background-color: #f0e9e1;
   border: none;
   width: 250px;
   height: 80px;
@@ -224,8 +226,7 @@ section{
   background-color: #cec8c2;
 }
 
-
-button img{
+button img {
   width: 30px;
   margin-right: 10px;
 }
@@ -233,32 +234,32 @@ button img{
 .btn-container hr {
   width: 250px;
   height: 2px;
-  background-color: #F0E9E1;
+  background-color: #f0e9e1;
   border: none;
   margin: 0;
 }
 
-.my-account, 
-.my-products, 
-.add-product, 
+.my-account,
+.my-products,
+.add-product,
 .orders,
 .my-orders,
-.earnings{
+.earnings {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  background-color: #F0E9E1;
+  background-color: #f0e9e1;
   margin-top: 20px;
   border-radius: 10px;
   margin-bottom: 50px;
   display: none;
 }
 
-.title{
+.title {
   display: flex;
   align-items: center;
-  background-color: #57473A;
+  background-color: #57473a;
   align-self: flex-start;
   width: 100%;
   height: 80px;
@@ -267,73 +268,107 @@ button img{
   border-radius: 10px;
 }
 
-.title p{
+.title p {
   margin-left: 40px;
 }
 
-.inputs-container{
+.inputs-container {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #73A1B1;
+  background-color: #73a1b1;
   border-radius: 10px;
   width: 1150px;
   padding: 40px 20px;
 }
 
-.input-box{
+.input-box {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60px;
   margin-bottom: 20px;
+  /* Remove fixed height so it grows with content */
 }
 
-.input-box input{
-  height: 100%;
+.input-box input[type="text"],
+.input-box input[type="number"],
+.input-box input[type="email"],
+.input-box input[type="password"] {
+  height: 60px;
   border-radius: 20px;
   width: 600px;
   font-size: 1.6em;
   border: none;
   padding: 0 20px;
+  box-sizing: border-box;
 }
 
-.add-product-label{
+.input-box textarea.add-product-input {
+  width: 600px;
+  border-radius: 20px;
+  font-size: 1.6em;
+  border: none;
+  padding: 20px 36px 20px 20px;
+  resize: none;
+  height: 180px;
+  box-sizing: border-box;
+  background-clip: padding-box;
+}
+
+.input-box textarea.add-product-input::-webkit-scrollbar {
+  width: 14px;
+  background: transparent;
+}
+
+.input-box textarea.add-product-input::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 20px;
+  border: 4px solid #f0e9e1; /* Match your textarea background */
+}
+
+.input-box textarea.add-product-input {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f0e9e1;
+}
+
+.add-product-label {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 300px;
-  height: 100%;
+  height: 60px;
   border-radius: 20px;
   font-size: 1.8em;
-  background-color: #F0E9E1;
+  background-color: #f0e9e1;
   margin-right: 20px;
 }
 
-.update-password-container{
+.update-password-container {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
 }
 
-.update-password{
+.update-password {
   margin: 0px 10px;
-  color: #57473A;
+  color: #57473a;
   font-size: 2em;
 }
 
-.update-password-container hr{
+.update-password-container hr {
   margin: 0;
   width: 350px;
   height: 2px;
-  background-color: #57473A;
+  background-color: #57473a;
   border: none;
 }
 
-.edit-btn-container, .add-btn-container{
+.edit-btn-container,
+.add-btn-container {
   display: flex;
   width: 100%;
   align-items: center;
@@ -341,7 +376,7 @@ button img{
   margin-bottom: 20px;
 }
 
-.profile-edit-btn{
+.profile-edit-btn {
   background-color: #708658;
   color: white;
   font-size: 1.5em;
@@ -356,29 +391,29 @@ button img{
 
 .profile-edit-btn:hover,
 .profile-pic-edit-btn:hover,
-.add-product-add-btn:hover{
+.add-product-add-btn:hover {
   background-color: #5c6e49;
 }
 
 .profile-edit-btn:active,
 .profile-pic-edit-btn:active,
-.add-product-add-btn:active{
+.add-product-add-btn:active {
   background-color: #708658;
 }
 
 /* MY PRODUCTS */
 
-.my-products-content, 
+.my-products-content,
 .orders-content,
 .my-orders-content,
-.earnings-content{
+.earnings-content {
   margin: 20px 0 40px 0;
 }
 
-.my-products-content table, 
-.orders-content table, 
+.my-products-content table,
+.orders-content table,
 .my-orders-content table,
-.earnings-content table{
+.earnings-content table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #000;
@@ -386,10 +421,10 @@ button img{
   background-color: white;
 }
 
-.my-products-content th, 
-.orders-content th, 
+.my-products-content th,
+.orders-content th,
 .my-orders-content th,
-.earnings-content th{
+.earnings-content th {
   background-color: #7ba0b6;
   color: white;
   height: 50px;
@@ -400,38 +435,71 @@ button img{
   border: 1px solid #000;
 }
 
-.my-products-content td, 
-.orders-content td, 
+.my-products-content td,
+.orders-content td,
 .my-orders-content td,
-.earnings-content td{
+.earnings-content td {
   border: 1px solid #ddd;
   font-size: 1.5em;
   border: 1px solid #000;
   padding: 10px;
 }
 
-.my-products-content th:nth-child(1){
+.my-products-content table {
+  width: 1200px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background: #f0e9e1;
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 1.5em;   
+}
+
+.my-products-content th,
+.my-products-content td {
+  padding: 18px 20px;
+  font-size: 1.2em;
+}
+
+.my-products-content th {
+  background: #73a1b1;
+  color: #fff;
+  font-size: 1.1em;
+}
+
+.my-products-content td {
+  background: #fff;
+}
+
+.my-product-product-image {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.my-products-content th:nth-child(1) {
   width: 100px;
 }
 
-.my-products-content th:nth-child(4){
+.my-products-content th:nth-child(4) {
   width: 150px;
 }
 
-.my-products-content td:nth-child(5){
+.my-products-content td:nth-child(5) {
   text-align: center;
 }
 
-.my-product-product-image{
+.my-product-product-image {
   width: 100%;
   height: 200px;
 }
 
-.remove-button{
+.remove-button {
   width: 200px;
   height: 50px;
   border: none;
-  background-color: #7E2727;
+  background-color: #7e2727;
   color: white;
   font-size: 1em;
   border-radius: 25px;
@@ -440,7 +508,7 @@ button img{
 
 /* Add Product */
 
-.select-container{
+.select-container {
   display: flex;
   align-items: center;
   position: relative;
@@ -448,7 +516,7 @@ button img{
   margin-bottom: 20px;
 }
 
-.select-container select{
+.select-container select {
   width: 600px;
   font-size: 1.6em;
   border: none;
@@ -461,7 +529,7 @@ button img{
   -moz-appearance: none;
 }
 
-.select-container img{
+.select-container img {
   position: absolute;
   width: 15px;
   height: 15px;
@@ -469,11 +537,11 @@ button img{
   pointer-events: none;
 }
 
-.arrow-up{
+.arrow-up {
   display: none;
 }
 
-.input-size-box{
+.input-size-box {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -481,7 +549,7 @@ button img{
   margin-bottom: 20px;
 }
 
-.size-checkboxes{
+.size-checkboxes {
   display: flex;
   align-items: center;
   width: 600px;
@@ -492,12 +560,11 @@ button img{
   margin: 0;
   width: 30px;
   height: 30px;
-  accent-color: #57473A;
+  accent-color: #57473a;
   margin-right: 5px;
 }
 
-
-.size-checkboxes label{
+.size-checkboxes label {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -505,7 +572,7 @@ button img{
   margin-right: 10px;
 }
 
-.input-color-box{
+.input-color-box {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -514,21 +581,21 @@ button img{
   margin-bottom: 20px;
 }
 
-.color-input-wrap{
+.color-input-wrap {
   display: flex;
   height: 60px;
 }
 
-.color-input-container{
+.color-input-container {
   position: relative;
   width: 600px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.color-input{
+.color-input {
   height: 60px;
   border: none;
   width: 100%;
@@ -537,7 +604,7 @@ button img{
   border-radius: 20px;
 }
 
-.add-color-button{
+.add-color-button {
   position: absolute;
   right: 0;
   width: 100px;
@@ -549,18 +616,18 @@ button img{
   font-size: 1.2em;
 }
 
-.color-list{
+.color-list {
   border-radius: 20px;
   align-self: flex-end;
   margin-right: 90px;
   width: 600px;
   flex-wrap: wrap;
   margin-top: 10px;
-  display: flex; 
+  display: flex;
   gap: 5px;
 }
 
-.add-product-add-btn{
+.add-product-add-btn {
   background-color: #708658;
   color: white;
   font-size: 1.5em;
@@ -572,7 +639,7 @@ button img{
   margin-top: 20px;
 }
 
-.input-image-box{
+.input-image-box {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -581,8 +648,8 @@ button img{
   width: 920px;
 }
 
-.input-image-title{
-  background-color: #F0E9E1;
+.input-image-title {
+  background-color: #f0e9e1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -593,7 +660,7 @@ button img{
   margin-bottom: 20px;
 }
 
-.input-upload-box{
+.input-upload-box {
   width: 100%;
   height: 600px;
   display: flex;
@@ -605,7 +672,7 @@ button img{
 }
 
 .upload-box {
-  background-color: #F0E9E1;
+  background-color: #f0e9e1;
   border-radius: 20px;
   border: 4px dashed #ccc;
   width: 440px;
@@ -622,7 +689,7 @@ button img{
 }
 
 .upload-box.hover {
-  border-color: #57473A;
+  border-color: #57473a;
 }
 
 .upload-box input {
@@ -648,7 +715,7 @@ button img{
 
 .remove-btn {
   margin-top: 12px;
-  background-color: #7E2727;
+  background-color: #7e2727;
   color: #fff;
   padding: 15px 20px;
   border: none;
@@ -658,12 +725,14 @@ button img{
   transition: background-color 0.3s;
 }
 
-.remove-btn:hover, .remove-button:hover {
+.remove-btn:hover,
+.remove-button:hover {
   background-color: #682020;
 }
 
-.remove-btn:active, .remove-button:active {
-  background-color: #7E2727;
+.remove-btn:active,
+.remove-button:active {
+  background-color: #7e2727;
 }
 
 #clothesType-container,
@@ -680,7 +749,7 @@ button img{
   margin-bottom: 30px;
 }
 .profile-container {
-  background: #73A1B1;
+  background: #73a1b1;
   border-radius: 10px;
   padding: 31.5px 40px 31.5px 40px;
   min-width: 260px;
@@ -688,7 +757,7 @@ button img{
   flex-direction: column;
   align-items: center;
   height: 100%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 .menu-container {
   flex: 1;
@@ -712,7 +781,7 @@ button img{
 
 .userImg-pic img {
   border-radius: 50%;
-  border: 8px solid #DCDCDC;
+  border: 8px solid #dcdcdc;
   width: 125px;
   height: 125px;
   object-fit: cover;
@@ -730,7 +799,7 @@ button img{
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: #00B4FF; /* for rightRound */
+  background: #00b4ff; /* for rightRound */
   /* background: #ff4444; for leftRound (set in the HTML or override below) */
   overflow: hidden;
   padding: 0;
@@ -743,12 +812,12 @@ button img{
 
 .userImg-pic .rightRound {
   right: 0;
-  background: #00B4FF;
+  background: #00b4ff;
 }
 
 /* Confirm button special position and color */
 #confirmPicBtn {
-  background: #00C851 !important;
+  background: #00c851 !important;
   right: -0.5px;
 }
 
@@ -785,7 +854,7 @@ button img{
   color: #fff;
   margin-top: 2px;
   font-weight: bold;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
   pointer-events: none;
 }
 
@@ -811,7 +880,7 @@ button img{
 .edit-btn-container {
   display: flex;
   gap: 1em;
-  margin-top: 1.2em; 
+  margin-top: 1.2em;
 }
 
 .profile-edit-btn {
@@ -849,7 +918,7 @@ button img{
 .toggle-password {
   cursor: pointer;
   position: absolute;
-  right: 20px;  /* <-- move further left (adjust as needed) */
+  right: 20px; /* <-- move further left (adjust as needed) */
   top: 50%;
   transform: translateY(-50%);
   height: 24px;
