@@ -961,3 +961,9 @@ button img {
 .password-input {
   padding-right: 36px;
 }
+
+.color-badge {
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}

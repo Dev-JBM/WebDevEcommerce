@@ -287,8 +287,11 @@ $imagePath = (!empty($user['image']))
                     <td class="id-input">PHP <?= number_format($row['price'], 2) ?></td>
                     <td class="id-input"><?= htmlspecialchars($row['stock_quantity']) ?></td>
                     <td class="id-input">
-                      <button type="button" class="edit-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Edit</button>
-                      <button type="button" class="remove-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Remove</button>
+                      <button type="button"
+                        class="edit-button"
+                        onclick="window.location.href='edit-products.php?id=<?= htmlspecialchars($row['product_id']) ?>'">
+                        Edit
+                      </button> <button type="button" class="remove-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Remove</button>
                     </td>
                   </tr>
                 <?php endwhile; ?>
@@ -437,7 +440,7 @@ $imagePath = (!empty($user['image']))
           </form>
         </div>
       </div>
-
+      
       <div class="orders">
         <div class="title">
           <p>Orders</p>
