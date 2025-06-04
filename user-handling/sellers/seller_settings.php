@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["fileImg"]["name"])) 
       mysqli_stmt_bind_param($stmt, "ss", $imageName, $username);
       mysqli_stmt_execute($stmt);
       mysqli_stmt_close($stmt);
-      header("Location: ../../settings.php");
+      header("Location: ../../user-handling/sellers/seller_settings.php")
       exit;
     }
   }
