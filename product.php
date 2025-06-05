@@ -15,6 +15,21 @@ $user = mysqli_fetch_assoc($result);
 $imagePath = (!empty($user['image']))
   ? 'images/profiles/' . $user['image']
   : './images/profile-circle-svgrepo-com.png';
+
+// --- PRODUCT FETCHING BASED ON ID ---
+$product = null;
+if (isset($_GET['id'])) {
+  $product_id = intval($_GET['id']);
+  $product_query = "SELECT * FROM products WHERE product_id = $product_id LIMIT 1";
+  $product_result = mysqli_query($conn, $product_query);
+  $product = mysqli_fetch_assoc($product_result);
+}
+
+if (!$product) {
+  echo "<h2 style='text-align:center;'>Product not found.</h2>";
+  exit;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -26,6 +41,7 @@ $imagePath = (!empty($user['image']))
   <title>Wear Dyans | Product</title>
   <link rel="stylesheet" href="style/product.css">
   <link rel="stylesheet" href="style/profilePic.css">
+  <link rel="stylesheet" href="style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -37,28 +53,18 @@ $imagePath = (!empty($user['image']))
       </div>
 
       <div class="search-bar">
-        <input type="text" placeholder="Search">
-        <img src="images/search-svgrepo-com.png">
+        <input type="text" id="productSearch" placeholder="Search">
+        <img id="searchBtn" src="images/search-svgrepo-com.png" style="cursor:pointer;">
       </div>
 
       <div class="right-header">
-        <a href="cart.html"><img src="images/SVGRepo_iconCarrier.png"></a>
-        <img class="profile" src="images/profile-circle-svgrepo-com.png" onclick="toggleMenu()">
-
+        <a href="cart.php"><img src="images/SVGRepo_iconCarrier.png"></a>
+        <img class="profile" src="<?= htmlspecialchars($imagePath); ?>" onclick="toggleMenu()" alt="profile">
         <div class="sub-menu-wrap" id="subMenu">
           <div class="sub-menu">
             <div class="user-info">
-              <img src="./images/profile-circle-svgrepo-com.png" alt="profile">
-              <h3 id="userName">User123</h3>
-            </div>
-            <hr>
-            <div class="sub-menu-link" id="toBecomeSeller">
-              <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
-                <path
-                  d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6zM432 480H80a31 31 0 01-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75 1.94 10.73-.68 21.34-7.18 29.11A31 31 0 01432 480z" />
-              </svg>
-              <a class="sub-menu-text" href="store.php">Back to shopping</a>
-              <span>></span>
+              <img class="profile-menu-img" src="<?= htmlspecialchars($imagePath); ?>" alt="profile">
+              <h3 id="userName"><?= htmlspecialchars($user['username']); ?></h3>
             </div>
 
             <div class="sub-menu-link" id="toSettings">
@@ -87,16 +93,17 @@ $imagePath = (!empty($user['image']))
       <div class="product-section">
         <div class="item-container">
           <div class="product-left-container">
-            <img src="./images/prdouct.png">
+            <img src="<?= !empty($product['image_path']) ? './images/products/' . htmlspecialchars($product['image_path']) : './images/prdouct.png' ?>" alt="Product Image">
           </div>
           <div class="product-right-container">
             <div class="product-name">
-              <p>Fleece Full-Zip Long Sleeve Jacket</p>
+              <p><?= htmlspecialchars($product['name']) ?></p>
             </div>
 
             <div>
               <div class="product-rating">
-                <div class="rating">5.0
+                <div class="rating">0.0
+                  <!-- Placeholder for rating stars -->
                   <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
@@ -109,8 +116,8 @@ $imagePath = (!empty($user['image']))
                   </svg>
                 </div>
                 <p class="qty-rating">
-                  <span class="qty-number">| 2 </span>Ratings
-                  <span class="sales-number">| 3 </span>Sold
+                  <span class="qty-number">| 0 </span>Ratings
+                  <span class="sales-number">| 0 </span>Sold
                 </p>
               </div>
             </div>
@@ -118,9 +125,7 @@ $imagePath = (!empty($user['image']))
             <div class="onsale-price">
               <p class="onsale">ON SALE !</p>
               <div class="price-container">
-                <p class="new-price">PHP 1,990.00</p>
-                <p class="orig-price">PHP 3,499.00</p>
-                <p class="percent">-57%</p>
+                <p class="new-price">PHP <?= number_format($product['price'], 2) ?></p>
               </div>
             </div>
 
@@ -129,22 +134,36 @@ $imagePath = (!empty($user['image']))
             <div class="variation-container">
               <div class="sizes-container">
                 <div class="sizes">
-                  <div>S</div>
-                  <div>M</div>
-                  <div>L</div>
+                  <?php if (!empty($product['sizes_available'])): ?>
+                    <?php foreach (explode(',', $product['sizes_available']) as $size): ?>
+                      <div><?= htmlspecialchars(trim($size)) ?></div>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
                 </div>
-                <p class="text-sizes">Size: <span class="size-picked">Medium</span></p>
+                <p class="text-sizes">Size: <span class="size-picked"></span></p>
               </div>
 
               <div class="colors-container">
-                <div class="colors">
-                  <div class="color-1"></div>
-                  <div class="color-2"></div>
-                  <div class="color-3"></div>
-                  <div class="color-4"></div>
-                  <div class="color-5"></div>
+                <div class="colors-dropdown">
+                  <button id="colorDropdownBtn" type="button">
+                    <span id="selectedColorCircle"></span>
+                    <span id="selectedColorText"></span>
+                    <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 20 20">
+                      <path d="M5.5 8l4.5 4.5L14.5 8" stroke="#333" stroke-width="2" fill="none" stroke-linecap="round" />
+                    </svg>
+                  </button>
+                  <div id="colorDropdownList">
+                    <?php if (!empty($product['colors_available'])): ?>
+                      <?php foreach (explode(',', $product['colors_available']) as $color): $color = trim($color); ?>
+                        <div class="color-option" data-color="<?= htmlspecialchars($color) ?>">
+                          <span class="color-circle" style="background:<?= htmlspecialchars($color) ?>"></span>
+                          <span><?= htmlspecialchars($color) ?></span>
+                        </div>
+                      <?php endforeach; ?>
+                    <?php endif; ?>
+                  </div>
                 </div>
-                <p class="text-colors">Color: <span class="color-picked">Green</span></p>
+                <p class="text-colors">Color: <span class="color-picked"></span></p>
               </div>
             </div>
 
@@ -154,7 +173,7 @@ $imagePath = (!empty($user['image']))
                 <p class="qty-text">1</p>
                 <img src="images/add-plus-svgrepo-com.svg">
               </div>
-              <p class="available-text"><span>20</span> pieces available</p>
+              <p class="available-text"><span><?= intval($product['stock_quantity']) ?></span> pieces available</p>
             </div>
 
             <div class="btns-product-right-container">
@@ -181,8 +200,7 @@ $imagePath = (!empty($user['image']))
             </div>
 
             <div class="description">
-              <p>-The body is made of a fabric with a chunky feel.</p>
-              <p>-Piping at the cuff and hem prevents wind from entering and keeps warmth in.</p>
+              <p><?= nl2br(htmlspecialchars($product['description'])) ?></p>
             </div>
           </div>
 
@@ -367,6 +385,8 @@ $imagePath = (!empty($user['image']))
     // ROLE CHECKER
     const userRole = <?= isset($user['role']) ? json_encode($user['role']) : 'null' ?>;
 
+
+
     document.addEventListener("DOMContentLoaded", function() {
       const settingsLink = document.getElementById("settingsLink");
       if (settingsLink) {
@@ -381,6 +401,156 @@ $imagePath = (!empty($user['image']))
           }
         });
       }
+    });
+
+    // DROPDOWN FOR COLORS
+    let selectedColor = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const btn = document.getElementById('colorDropdownBtn');
+      const list = document.getElementById('colorDropdownList');
+      const colorPicked = document.querySelector('.color-picked');
+      const selectedColorCircle = document.getElementById('selectedColorCircle');
+      const selectedColorText = document.getElementById('selectedColorText');
+      const firstColorOption = document.querySelector('.color-option');
+
+      // Set initial state: asks user to choose a color
+      selectedColorCircle.style.background = "#ccc";
+      selectedColorText.textContent = "Choose a color";
+      colorPicked.textContent = "None";
+
+      if (btn && list) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          list.style.display = list.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.querySelectorAll('.color-option').forEach(function(opt) {
+          opt.addEventListener('click', function(e) {
+            const color = this.getAttribute('data-color');
+            selectedColorCircle.style.background = color;
+            selectedColorText.textContent = color;
+            colorPicked.textContent = color;
+            selectedColor = color; // <-- Store the selected color here
+            list.style.display = 'none';
+          });
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', function() {
+          list.style.display = 'none';
+        });
+      }
+    });
+
+    // SIZES SELECTION LOGIC
+    const sizeDivs = document.querySelectorAll('.sizes div');
+    const sizePicked = document.querySelector('.size-picked');
+    let selectedSize = null;
+
+    sizeDivs.forEach(function(div) {
+      div.style.cursor = "pointer";
+      div.addEventListener('click', function() {
+        // Remove 'selected-size' class from all
+        sizeDivs.forEach(d => d.classList.remove('selected-size'));
+        // Add to clicked
+        this.classList.add('selected-size');
+        selectedSize = this.textContent.trim();
+        if (sizePicked) sizePicked.textContent = selectedSize;
+      });
+    });
+
+    // PRODUCT QUANTITY COUNTER
+    document.addEventListener('DOMContentLoaded', function() {
+      const qtyContainer = document.querySelector('.product-qty');
+      if (!qtyContainer) return;
+      const minusBtn = qtyContainer.querySelector('img[src*="minus"]');
+      const plusBtn = qtyContainer.querySelector('img[src*="add-plus"]');
+      const qtyText = qtyContainer.querySelector('.qty-text');
+      const available = parseInt(document.querySelector('.available-text span').textContent, 10) || 1;
+      let productQty = 1;
+
+      qtyText.contentEditable = true;
+      qtyText.spellcheck = false;
+      qtyText.textContent = productQty;
+
+      function highlightQty() {
+        qtyText.style.background = "#e0e5db";
+        qtyText.style.borderRadius = "8px";
+        qtyText.style.transition = "background 0.2s";
+        setTimeout(() => {
+          qtyText.style.background = "";
+        }, 200);
+      }
+
+      minusBtn.style.cursor = "pointer";
+      plusBtn.style.cursor = "pointer";
+
+      minusBtn.addEventListener('click', function() {
+        if (productQty > 1) {
+          productQty--;
+          qtyText.textContent = productQty;
+          highlightQty();
+        }
+      });
+
+      plusBtn.addEventListener('click', function() {
+        if (productQty < available) {
+          productQty++;
+          qtyText.textContent = productQty;
+          highlightQty();
+        }
+      });
+
+      qtyText.addEventListener('blur', function() {
+        let val = parseInt(qtyText.textContent.replace(/\D/g, ''), 10);
+        if (isNaN(val) || val < 1) val = 1;
+        if (val > available) val = available;
+        productQty = val;
+        qtyText.textContent = productQty;
+        highlightQty();
+      });
+
+      qtyText.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          qtyText.blur();
+        }
+      });
+    });
+  </script>
+
+  <!-- FOR LOGOUT OPTION -->
+  <div id="logoutModal" class="logout-modal">
+    <div class="logout-modal-content">
+      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" style="margin-bottom: 1em;">
+        <circle cx="12" cy="12" r="12" fill="#ffe5e5" />
+        <path d="M12 8v4" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" />
+        <circle cx="12" cy="16" r="1" fill="#e74c3c" />
+      </svg>
+      <p class="logout-modal-title">Log Out?</p>
+      <p class="logout-modal-desc">Are you sure you want to logout?</p>
+      <div class="logout-modal-actions">
+        <button id="logoutYes" class="logout-btn logout-btn-yes">Yes</button>
+        <button id="logoutNo" class="logout-btn logout-btn-no">No</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Show modal on logout click
+    document.getElementById("logout").addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("logoutModal").style.display = "flex";
+    });
+
+    // Hide modal on "No"
+    document.getElementById("logoutNo").addEventListener("click", function() {
+      document.getElementById("logoutModal").style.display = "none";
+    });
+
+    // Logout on "Yes"
+    document.getElementById("logoutYes").addEventListener("click", function() {
+      window.location.href = "./features/logout.php";
     });
   </script>
 </body>
