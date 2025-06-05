@@ -10,6 +10,23 @@ $query = "SELECT * FROM users WHERE username = '$username' LIMIT 1";
 $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
 
+// PRODUCT INFO FETCHING
+$products = [];
+$productQuery = "
+  SELECT 
+    p.*, 
+    COALESCE(SUM(CASE WHEN o.status IN ('paid','shipped','delivered') THEN oi.quantity ELSE 0 END), 
+    0) AS sales FROM products p
+    LEFT JOIN order_items oi ON p.product_id = oi.product_id
+    LEFT JOIN orders o ON oi.order_id = o.order_id
+    GROUP BY p.product_id
+";
+
+$productResult = mysqli_query($conn, $productQuery);
+while ($row = mysqli_fetch_assoc($productResult)) {
+  $products[] = $row;
+}
+
 $imagePath = (!empty($user['image']))
   ? 'images/profiles/' . $user['image']
   : './images/profile-circle-svgrepo-com.png';
@@ -35,8 +52,8 @@ $imagePath = (!empty($user['image']))
     </div>
 
     <div class="search-bar">
-      <input type="text" placeholder="Search">
-      <img src="images/search-svgrepo-com.png">
+      <input type="text" id="productSearch" placeholder="Search">
+      <img id="searchBtn" src="images/search-svgrepo-com.png" style="cursor:pointer;">
     </div>
 
     <div class="right-header">
@@ -143,232 +160,52 @@ $imagePath = (!empty($user['image']))
         </div>
 
         <div class="products">
-          <div class="products-box">
-            <div class="product-img">
-              <img src="./images/product_image.png">
-            </div>
-            <div class="product-text">
-              <div class="product-name">
-                <p>Fleece Full-Zip Long Sleeve Jacket</p>
-              </div>
-              <div class="product-price">
-                <p>₱ 1500.00</p>
-              </div>
-              <div class="product-bottom-text">
-                <div class="product-rating">
-                  <p>5.0</p>
-                  <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
-                </div>
-                <div class="product-sales">
-                  <p>15 Sold</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <?php foreach ($products as $product): ?>
+            <a href="product.php?id=<?= $product['product_id'] ?>" class="product-link" style="text-decoration:none; color:inherit;">
+              <div class="products-box"
+                data-gender="<?= htmlspecialchars($product['gender']) ?>"
+                data-category="<?= htmlspecialchars($product['category']) ?>"
+                data-type="<?= htmlspecialchars($product['type']) ?>"
+                data-sales="<?= intval($product['sales']) ?>"
+                data-created="<?= htmlspecialchars($product['created_at']) ?>"
+                data-rating="0">
 
-          <div class="products-box">
-            <div class="product-img">
-              <img src="./images/product_image.png">
-            </div>
-            <div class="product-text">
-              <div class="product-name">
-                <p>Fleece Full-Zip Long Sleeve Jacket</p>
-              </div>
-              <div class="product-price">
-                <p>₱ 1500.00</p>
-              </div>
-              <div class="product-bottom-text">
-                <div class="product-rating">
-                  <p>5.0</p>
-                  <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
+                <div class="product-img">
+                  <img src="<?= !empty($product['image_path']) ? './images/products/' . htmlspecialchars($product['image_path']) : './images/product_image.png' ?>" alt="Product Image">
                 </div>
-                <div class="product-sales">
-                  <p>15 Sold</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="products-box">
-            <div class="product-img">
-              <img src="./images/product_image.png">
-            </div>
-            <div class="product-text">
-              <div class="product-name">
-                <p>Fleece Full-Zip Long Sleeve Jacket</p>
-              </div>
-              <div class="product-price">
-                <p>₱ 1500.00</p>
-              </div>
-              <div class="product-bottom-text">
-                <div class="product-rating">
-                  <p>5.0</p>
-                  <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
-                </div>
-                <div class="product-sales">
-                  <p>15 Sold</p>
+                <div class="product-text">
+                  <div class="product-name">
+                    <p><?= htmlspecialchars($product['name']) ?></p>
+                  </div>
+                  <div class="product-price">
+                    <p>₱ <?= number_format($product['price'], 2) ?></p>
+                  </div>
+                  <div class="product-bottom-text">
+                    <div class="product-rating">
+                      <p><!-- To be followed --></p>
+                      <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
+                        </defs>
+                        <use href="#star" x="0" y="5" />
+                        <use href="#star" x="25" y="5" />
+                        <use href="#star" x="50" y="5" />
+                        <use href="#star" x="75" y="5" />
+                        <use href="#star" x="100" y="5" />
+                      </svg>
+                    </div>
+                    <div class="product-sales">
+                      <p><?= intval($product['sales']) ?> Sold</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="products-box">
-            <div class="product-img">
-              <img src="./images/product_image.png">
-            </div>
-            <div class="product-text">
-              <div class="product-name">
-                <p>Fleece Full-Zip Long Sleeve Jacket</p>
-              </div>
-              <div class="product-price">
-                <p>₱ 1500.00</p>
-              </div>
-              <div class="product-bottom-text">
-                <div class="product-rating">
-                  <p>5.0</p>
-                  <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
-                </div>
-                <div class="product-sales">
-                  <p>15 Sold</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="products-box">
-            <div class="product-img">
-              <img src="./images/product_image.png">
-            </div>
-            <div class="product-text">
-              <div class="product-name">
-                <p>Fleece Full-Zip Long Sleeve Jacket</p>
-              </div>
-              <div class="product-price">
-                <p>₱ 1500.00</p>
-              </div>
-              <div class="product-bottom-text">
-                <div class="product-rating">
-                  <p>5.0</p>
-                  <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
-                </div>
-                <div class="product-sales">
-                  <p>15 Sold</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="products-box">
-            <div class="product-img">
-              <img src="./images/product_image.png">
-            </div>
-            <div class="product-text">
-              <div class="product-name">
-                <p>Fleece Full-Zip Long Sleeve Jacket</p>
-              </div>
-              <div class="product-price">
-                <p>₱ 1500.00</p>
-              </div>
-              <div class="product-bottom-text">
-                <div class="product-rating">
-                  <p>5.0</p>
-                  <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
-                </div>
-                <div class="product-sales">
-                  <p>15 Sold</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="products-box">
-            <div class="product-img">
-              <img src="./images/product_image.png">
-            </div>
-            <div class="product-text">
-              <div class="product-name">
-                <p>Fleece Full-Zip Long Sleeve Jacket</p>
-              </div>
-              <div class="product-price">
-                <p>₱ 1500.00</p>
-              </div>
-              <div class="product-bottom-text">
-                <div class="product-rating">
-                  <p>5.0</p>
-                  <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
-                </div>
-                <div class="product-sales">
-                  <p>15 Sold</p>
-                </div>
-              </div>
-            </div>
+            </a>
+          <?php endforeach; ?>
+          <div id="noProductsMsg" style="display:none; text-align:center; width:100%; color:#888; font-size:1.2em; margin-top:2em;">
+            No products match the selected filters.
           </div>
         </div>
-      </div>
-    </div>
 
   </section>
 
@@ -410,20 +247,170 @@ $imagePath = (!empty($user['image']))
       select.blur();
     });
 
-    // ASC and DESC button
+    // PRODUCT SORTING - ASCENDING/DESCENDING
+    let sortDirection = 'desc'; // Default: descending
+
+    function sortProducts() {
+      const sortValue = document.getElementById('filter').value;
+      const productsContainer = document.querySelector('.products');
+      const productLinks = Array.from(productsContainer.querySelectorAll('.product-link'));
+
+      let sortedLinks = productLinks.slice();
+
+      sortedLinks.sort((a, b) => {
+        const boxA = a.querySelector('.products-box');
+        const boxB = b.querySelector('.products-box');
+        let valA, valB;
+
+        if (sortValue === 'Popular') {
+
+          const ratingA = parseFloat(boxA.getAttribute('data-rating')) || 0;
+          const ratingB = parseFloat(boxB.getAttribute('data-rating')) || 0;
+          const salesA = parseInt(boxA.getAttribute('data-sales')) || 0;
+          const salesB = parseInt(boxB.getAttribute('data-sales')) || 0;
+          if (ratingA !== ratingB) {
+            valA = ratingA;
+            valB = ratingB;
+          } else {
+            valA = salesA;
+            valB = salesB;
+          }
+        } else if (sortValue === 'Latest') {
+          valA = new Date(boxA.getAttribute('data-created'));
+          valB = new Date(boxB.getAttribute('data-created'));
+        } else if (sortValue === 'Sales') {
+          valA = parseInt(boxA.getAttribute('data-sales')) || 0;
+          valB = parseInt(boxB.getAttribute('data-sales')) || 0;
+        } else {
+          valA = 0;
+          valB = 0;
+        }
+
+
+        if (sortDirection === 'asc') {
+          return valA > valB ? 1 : valA < valB ? -1 : 0;
+        } else {
+          return valA < valB ? 1 : valA > valB ? -1 : 0;
+        }
+      });
+
+      productLinks.forEach(link => link.parentNode.removeChild(link));
+      sortedLinks.forEach(link => productsContainer.appendChild(link));
+    }
+
     const asc = document.querySelector(".asc");
     const desc = document.querySelector(".desc");
 
     desc.addEventListener("click", () => {
       desc.style.display = "none";
       asc.style.display = "inline";
+      sortDirection = 'asc';
+      sortProducts();
+      filterProducts();
     });
 
     asc.addEventListener("click", () => {
       asc.style.display = "none";
       desc.style.display = "inline";
+      sortDirection = 'desc';
+      sortProducts();
+      filterProducts();
+    });
+
+    document.getElementById('filter').addEventListener('change', function() {
+      sortProducts();
+      filterProducts();
+    });
+
+    sortProducts();
+
+    // PRODUCT FILTERING
+    function getCheckedValues(name) {
+      return Array.from(document.querySelectorAll('input[name="' + name + '"]:checked')).map(cb => cb.value);
+    }
+
+    function filterProducts() {
+      const genderVals = getCheckedValues('gender');
+      const clothesVals = getCheckedValues('clothes');
+      const accessoriesVals = getCheckedValues('accessories');
+
+      let typeVals = [];
+      if (clothesVals.length) typeVals = typeVals.concat(clothesVals);
+      if (accessoriesVals.length) typeVals = typeVals.concat(accessoriesVals);
+
+      const products = document.querySelectorAll('.products-box');
+      let anyVisible = false;
+
+      products.forEach(box => {
+        const gender = box.getAttribute('data-gender');
+        const category = box.getAttribute('data-category');
+        const type = box.getAttribute('data-type');
+
+        let show = true;
+
+        if (genderVals.length && !genderVals.includes(gender)) show = false;
+
+        if ((clothesVals.length || accessoriesVals.length)) {
+          if (clothesVals.length && category !== 'Clothes') show = false;
+          if (accessoriesVals.length && category !== 'Accessories') show = false;
+        }
+
+        if (typeVals.length && !typeVals.includes(type)) show = false;
+
+        box.parentElement.style.display = show ? '' : 'none';
+        if (show) anyVisible = true;
+      });
+
+      document.getElementById('noProductsMsg').style.display = anyVisible ? 'none' : 'block';
+    }
+
+    document.querySelectorAll('.filter-container input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', filterProducts);
+    });
+
+    filterProducts();
+
+
+    // PRODUCT SEARCHING
+    function searchProducts() {
+      const searchValue = document.getElementById('productSearch').value.trim().toLowerCase();
+      const products = document.querySelectorAll('.products-box');
+      let anyVisible = false;
+
+      products.forEach(box => {
+        const name = box.querySelector('.product-name p').textContent.toLowerCase();
+        const desc = box.querySelector('.product-text').textContent.toLowerCase();
+
+        const matches = name.includes(searchValue) || desc.includes(searchValue);
+
+        if (matches && box.parentElement.style.display !== "none") {
+          box.parentElement.style.display = "";
+          anyVisible = true;
+        } else {
+          box.parentElement.style.display = "none";
+        }
+      });
+
+      document.getElementById('noProductsMsg').style.display = anyVisible ? 'none' : 'block';
+    }
+
+    document.getElementById('productSearch').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        searchProducts();
+      }
+    });
+
+    document.getElementById('searchBtn').addEventListener('click', function() {
+      searchProducts();
+    });
+
+    document.getElementById('productSearch').addEventListener('input', function() {
+      if (this.value.trim() === '') {
+        filterProducts();
+      }
     });
   </script>
+
 
   <!-- FOR LOGOUT OPTION -->
   <div id="logoutModal" class="logout-modal">

@@ -33,7 +33,7 @@ $imagePath = (!empty($user['image']))
   <main>
     <header class="header">
       <div class="left-header">
-        <a href="store.html">Wear Dyans</a>
+        <a href="store.php">Wear Dyans</a>
       </div>
 
       <div class="search-bar">

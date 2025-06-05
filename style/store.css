@@ -201,9 +201,12 @@ select{
 .products{
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
   width: 100%;
   max-height: 475px;
   margin-top: 20px;
+  padding-top: 10px;
+  padding-left: 35px;
   overflow-y: scroll;
   scrollbar-color: #B7B7B7 transparent;
 }
@@ -218,8 +221,28 @@ select{
   margin-bottom: 10px;
   border-color:  #B7B7B7;
   border-style: solid;
-  border-width: 1px;
+  border-width: 2px;
   border-radius: 14px;
+  transition: 
+    transform 0.2s cubic-bezier(0.4,0,0.2,1),
+    box-shadow 0.2s cubic-bezier(0.4,0,0.2,1),
+    border-color 0.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+.products-box:hover {
+  transform: scale(1.04);
+  border-color: #73A1B1;
+  box-shadow: 0 4px 24px rgba(115, 161, 177, 0.30), 0 1.5px 8px rgba(0,0,0,0.08);
+  z-index: 2;
+}
+
+.product-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.product-link .products-box {
+  cursor: pointer;
 }
 
 .product-img{
