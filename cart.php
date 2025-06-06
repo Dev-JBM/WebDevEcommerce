@@ -97,7 +97,8 @@ if ($buyer_id) {
     FROM cart_items ci
     JOIN products p ON ci.product_id = p.product_id
     WHERE ci.cart_id = $cart_id
-  ";
+    ORDER BY ci.added_at DESC";
+    
     $items_result = mysqli_query($conn, $items_query);
     while ($item = mysqli_fetch_assoc($items_result)) {
       $cart_items[] = $item;
