@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db-connection.php'; 
+require_once 'db-connection.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastname = $conn->real_escape_string($_POST['lastname']);
     $birthdate = $conn->real_escape_string($_POST['birthdate']);
 
-    
+
     $passwordPattern = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/';
 
     if (!preg_match($passwordPattern, $password)) {
@@ -31,21 +31,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        
+
         $checkUsernameQuery = "SELECT * FROM users WHERE username = '$username'";
         $checkUsernameResult = mysqli_query($conn, $checkUsernameQuery);
 
         if (mysqli_num_rows($checkUsernameResult) > 0) {
             $message = "Username is already taken.";
         } else {
-            
+
             $checkEmailQuery = "SELECT * FROM users WHERE email = '$email'";
             $checkEmailResult = mysqli_query($conn, $checkEmailQuery);
 
             if (mysqli_num_rows($checkEmailResult) > 0) {
                 $message = "Email is already taken.";
             } else {
-                
+
                 $checkPhoneQuery = "SELECT * FROM users WHERE phone_number = '$phone'";
                 $checkPhoneResult = mysqli_query($conn, $checkPhoneQuery);
 
@@ -57,6 +57,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             VALUES ('$username', '$email', '$phone', '$hashed_password', '$address', '$firstname', '$middlename', '$lastname', '$birthdate')";
 
                     if (mysqli_query($conn, $sql)) {
+                        $user_id = mysqli_insert_id($conn);
+                        $insert_buyer = "INSERT INTO buyer_profiles (buyer_id, first_name, middle_name, last_name, birthdate, phone_number, address)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?)";
+                        $stmt = $conn->prepare($insert_buyer);
+                        $stmt->bind_param(
+                            "issssss",
+                            $user_id,
+                            $firstname,
+                            $middlename,
+                            $lastname,
+                            $birthdate,
+                            $phone,
+                            $address
+                        );
+                        $stmt->execute();
                         $message = "Registration Successful";
                     } else {
                         $message = "Error: Unable to register. Please try again later.";

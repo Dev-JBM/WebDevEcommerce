@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 require_once './features/db-connection.php';
 
@@ -177,12 +178,17 @@ if (!$product) {
             </div>
 
             <div class="btns-product-right-container">
-              <div>
-                <button class="btn-cart">
+              <!-- Place this inside your .btns-product-right-container or wherever your Add to Cart button is -->
+              <form id="addToCartForm" action="cart.php" method="post">
+                <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']) ?>">
+                <input type="hidden" name="size" id="cartSize">
+                <input type="hidden" name="color" id="cartColor">
+                <input type="hidden" name="quantity" id="cartQty">
+                <button type="submit" class="btn-cart">
                   <img src="images/SVGRepo_iconCarrier_brown.png">
                   Add to Cart
                 </button>
-              </div>
+              </form>
               <div>
                 <button class="btn-buy">
                   Buy Now
@@ -331,6 +337,10 @@ if (!$product) {
   </main>
 
   <script>
+    let selectedSize = null;
+    let selectedColor = null;
+    let productQty = 1;
+
     // TOGGLE MENU
     let subMenu = document.getElementById("subMenu");
 
@@ -386,7 +396,6 @@ if (!$product) {
     const userRole = <?= isset($user['role']) ? json_encode($user['role']) : 'null' ?>;
 
 
-
     document.addEventListener("DOMContentLoaded", function() {
       const settingsLink = document.getElementById("settingsLink");
       if (settingsLink) {
@@ -404,8 +413,6 @@ if (!$product) {
     });
 
     // DROPDOWN FOR COLORS
-    let selectedColor = null;
-
     document.addEventListener('DOMContentLoaded', function() {
       const btn = document.getElementById('colorDropdownBtn');
       const list = document.getElementById('colorDropdownList');
@@ -414,7 +421,6 @@ if (!$product) {
       const selectedColorText = document.getElementById('selectedColorText');
       const firstColorOption = document.querySelector('.color-option');
 
-      // Set initial state: asks user to choose a color
       selectedColorCircle.style.background = "#ccc";
       selectedColorText.textContent = "Choose a color";
       colorPicked.textContent = "None";
@@ -431,12 +437,12 @@ if (!$product) {
             selectedColorCircle.style.background = color;
             selectedColorText.textContent = color;
             colorPicked.textContent = color;
-            selectedColor = color; // <-- Store the selected color here
+            selectedColor = color;
             list.style.display = 'none';
           });
         });
 
-        // Hide dropdown when clicking outside
+
         document.addEventListener('click', function() {
           list.style.display = 'none';
         });
@@ -446,14 +452,13 @@ if (!$product) {
     // SIZES SELECTION LOGIC
     const sizeDivs = document.querySelectorAll('.sizes div');
     const sizePicked = document.querySelector('.size-picked');
-    let selectedSize = null;
 
     sizeDivs.forEach(function(div) {
       div.style.cursor = "pointer";
       div.addEventListener('click', function() {
-        // Remove 'selected-size' class from all
+
         sizeDivs.forEach(d => d.classList.remove('selected-size'));
-        // Add to clicked
+
         this.classList.add('selected-size');
         selectedSize = this.textContent.trim();
         if (sizePicked) sizePicked.textContent = selectedSize;
@@ -468,7 +473,6 @@ if (!$product) {
       const plusBtn = qtyContainer.querySelector('img[src*="add-plus"]');
       const qtyText = qtyContainer.querySelector('.qty-text');
       const available = parseInt(document.querySelector('.available-text span').textContent, 10) || 1;
-      let productQty = 1;
 
       qtyText.contentEditable = true;
       qtyText.spellcheck = false;
@@ -518,6 +522,19 @@ if (!$product) {
         }
       });
     });
+
+    document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+
+      document.getElementById('cartSize').value = selectedSize;
+      document.getElementById('cartColor').value = selectedColor;
+      document.getElementById('cartQty').value = productQty;
+
+      if (!selectedSize || !selectedColor || productQty < 1) {
+        alert('Please select a size, color, and valid quantity.');
+        e.preventDefault();
+      }
+    });
+
   </script>
 
   <!-- FOR LOGOUT OPTION -->

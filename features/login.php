@@ -43,6 +43,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = "Invalid username, email, or phone number.";
     }
 
+    if (!empty($message)) {
+        $_SESSION['login_error'] = $message;
+        header("Location: ../homepage.php");
+        exit;
+    }
+
+
     $conn->close();
 }
 ?>

@@ -1,6 +1,13 @@
 <?php
 session_start();
+require_once './features/db-connection.php';
 
+if (!empty($_SESSION['login_error'])): ?>
+  <script>
+    alert("<?= htmlspecialchars($_SESSION['login_error']) ?>");
+  </script>
+  <?php unset($_SESSION['login_error']); ?>
+<?php endif; ?>
 ?>
 
 <!DOCTYPE html>
