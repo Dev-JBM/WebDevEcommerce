@@ -450,3 +450,133 @@ section {
   cursor: pointer;
   border: none;
 }
+
+
+/* FOR CHECKOUT POP-UP */
+.checkout-modal {
+  position: fixed;
+  z-index: 9999;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+}
+.checkout-modal-content {
+  background: #fff;
+  padding: 2em;
+  border-radius: 12px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  max-width: 500px;
+  position: relative;
+}
+.close-modal {
+  position: absolute;
+  top: 1em; right: 1em;
+  font-size: 2em;
+  cursor: pointer;
+}
+#checkoutItems {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1em;
+}
+#checkoutItems .checkout-item {
+  border-bottom: 1px solid #eee;
+  padding: 0.5em 0;
+}
+
+/* Stylish and larger radio buttons for payment method */
+.payment-method label {
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+  margin-bottom: 2px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.payment-method label:hover {
+  background: #f5e9d7;
+  box-shadow: 0 2px 8px rgba(87, 71, 58, 0.08);
+}
+
+.payment-method input[type="radio"] {
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #57473A;
+  border-radius: 50%;
+  margin-right: 8px;
+  outline: none;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.payment-method input[type="radio"]:checked {
+  border-color: #708658;
+  background: #708658;
+}
+
+.payment-method input[type="radio"]:checked::before {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+
+.payment-method input[type="radio"]:focus {
+  box-shadow: 0 0 0 2px #70865855;
+}
+
+/* Checkout Modal Buttons */
+#confirmCheckoutBtn, #cancelCheckoutBtn {
+  padding: 12px 32px;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(87, 71, 58, 0.08);
+}
+
+#confirmCheckoutBtn {
+  background-color: #57473A;
+  color: #fff;
+  font-weight: bold;
+}
+
+#confirmCheckoutBtn:hover {
+  background-color: #708658;
+  color: #fff;
+}
+
+#cancelCheckoutBtn {
+  background-color: #ffe5e5;
+  color: #7E2727;
+  font-weight: bold;
+  border: 2px solid #7E2727;
+}
+
+#cancelCheckoutBtn:hover {
+  background-color: #f8d7da;
+  color: #a94442;
+  border-color: #a94442;
+}
+
+.checkout-btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}

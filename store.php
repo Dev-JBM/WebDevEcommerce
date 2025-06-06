@@ -15,11 +15,11 @@ $products = [];
 $productQuery = "
   SELECT 
     p.*, 
-    COALESCE(SUM(CASE WHEN o.status IN ('paid','shipped','delivered') THEN oi.quantity ELSE 0 END), 
-    0) AS sales FROM products p
-    LEFT JOIN order_items oi ON p.product_id = oi.product_id
-    LEFT JOIN orders o ON oi.order_id = o.order_id
-    GROUP BY p.product_id
+    COALESCE(SUM(oi.quantity), 0) AS sales,
+    COALESCE(SUM(oi.quantity * oi.price_at_purchase), 0) AS sold_value
+  FROM products p
+  LEFT JOIN order_items oi ON p.product_id = oi.product_id
+  GROUP BY p.product_id
 ";
 
 $productResult = mysqli_query($conn, $productQuery);

@@ -312,7 +312,7 @@ $imagePath = (!empty($user['image']))
         </div>
       </div>
 
-      <div class="orders">
+      <div class="orders" id="buyer-orders">
         <div class="title">
           <p>Orders</p>
         </div>
@@ -413,7 +413,7 @@ $imagePath = (!empty($user['image']))
       'my-account-btn': ['my-account'],
       'my-products-btn': ['my-products'],
       'add-product-btn': ['add-product'],
-      'orders-btn': ['orders', 'my-orders'],
+      'orders-btn': ['my-orders'],
       'earnings-btn': ['earnings']
     };
 

@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'], $_POST[
     $stmt = $conn->prepare($insert_cart);
     $stmt->bind_param("i", $buyer_id);
     $stmt->execute();
+
     $cart_id = $stmt->insert_id;
   }
 
@@ -98,7 +99,7 @@ if ($buyer_id) {
     JOIN products p ON ci.product_id = p.product_id
     WHERE ci.cart_id = $cart_id
     ORDER BY ci.added_at DESC";
-    
+
     $items_result = mysqli_query($conn, $items_query);
     while ($item = mysqli_fetch_assoc($items_result)) {
       $cart_items[] = $item;
@@ -218,51 +219,51 @@ if ($buyer_id) {
                             <span class="size"><?= htmlspecialchars($item['size']) ?></span>,
                             <span class="color"><?= htmlspecialchars($item['color']) ?></span>
                           </p>
+                        </div>
+                      </div>
+                      <div class="price">
+                        <p>PHP <span class="discounted-price"><?= number_format($item['price'], 2) ?></span></p>
+                      </div>
+                      <div class="quantity">
+                        <div
+                          class="product-qty"
+                          data-cart-item-id="<?= $item['cart_item_id'] ?>"
+                          data-available="<?= intval($item['stock_quantity'] ?? 99) ?>">
+                          <img src="images/minus-svgrepo-com.svg" class="qty-minus" style="height: 20px; margin-right: 0;">
+                          <p class="qty-text"><?= intval($item['quantity']) ?></p>
+                          <img src="images/add-plus-svgrepo-com.svg" class="qty-plus" style="height: 20px;">
+                        </div>
+                      </div>
+                      <div class="total">
+                        <p>PHP <span class="total-ptice"><?= number_format($item['price'] * $item['quantity'], 2) ?></span></p>
+                      </div>
+                      <div class="actions">
+                        <button type="submit" class="remove-btn">Remove</button>
                       </div>
                     </div>
-                    <div class="price">
-                      <p>PHP <span class="discounted-price"><?= number_format($item['price'], 2) ?></span></p>
-                    </div>
-                    <div class="quantity">
-                      <div
-                        class="product-qty"
-                        data-cart-item-id="<?= $item['cart_item_id'] ?>"
-                        data-available="<?= intval($item['stock_quantity'] ?? 99) ?>">
-                        <img src="images/minus-svgrepo-com.svg" class="qty-minus" style="height: 20px; margin-right: 0;">
-                        <p class="qty-text"><?= intval($item['quantity']) ?></p>
-                        <img src="images/add-plus-svgrepo-com.svg" class="qty-plus" style="height: 20px;">
-                      </div>
-                    </div>
-                    <div class="total">
-                      <p>PHP <span class="total-ptice"><?= number_format($item['price'] * $item['quantity'], 2) ?></span></p>
-                    </div>
-                    <div class="actions">
-                      <button type="submit" class="remove-btn">Remove</button>
-                    </div>
+                  <?php endforeach; ?>
+                <?php endif; ?>
               </div>
-            <?php endforeach; ?>
-          <?php endif; ?>
-            </div>
 
-            <div class="cart-footer">
-              <div class="left-footer">
-                <button type="button" class="select-all-btn">Select All</button>
-                <!-- Change this button to type="submit" -->
-                <button type="submit" class="remove-btn-footer" name="remove_selected">Remove</button>
-              </div>
-              <div class="right-footer">
-                <div class="total-price-selected-items">
-                  <p>Total (<span class="item-selected">2</span> Items): PHP <span class="total-price-selected">3,980</span></p>
+              <div class="cart-footer">
+                <div class="left-footer">
+                  <button type="button" class="select-all-btn">Select All</button>
+                  <!-- Change this button to type="submit" -->
+                  <button type="submit" class="remove-btn-footer" name="remove_selected">Remove</button>
                 </div>
-                <button class="check-out-btn">
-                  Check Out
-                </button>
+                <div class="right-footer">
+                  <div class="total-price-selected-items">
+                    <p>Total (<span class="item-selected">2</span> Items): PHP <span class="total-price-selected">3,980</span></p>
+                  </div>
+                  <button class="check-out-btn">
+                    Check Out
+                  </button>
+                </div>
               </div>
             </div>
-        </div>
-        </form>
+          </form>
 
-      </div>
+        </div>
     </section>
   </main>
 
@@ -420,6 +421,34 @@ if ($buyer_id) {
     });
   </script>
 
+  <!-- FOR CHECKOUT -->
+  <div id="checkoutModal" class="checkout-modal" style="display:none;">
+    <div class="checkout-modal-content">
+      <span class="close-modal" id="closeCheckoutModal">&times;</span>
+      <h2>Order Summary</h2>
+      <form id="checkoutForm" method="post" action="features/checkout.php">
+        <div id="checkoutItems"></div>
+        <div class="buyer-address">
+          <h3>Shipping Address</h3>
+          <p id="buyerAddress"><?= htmlspecialchars($user['address'] ?? 'No address on file') ?></p>
+          <input type="hidden" name="shipping_address" value="<?= htmlspecialchars($user['address'] ?? '') ?>">
+          <input type="hidden" name="buyer_id" value="<?= htmlspecialchars($user['user_id'] ?? '') ?>">
+        </div>
+        <div class="payment-method">
+          <h3>Payment Method</h3>
+          <label><input type="radio" name="payment_method" value="cash on delivery" checked> Cash on Delivery</label><br>
+          <label><input type="radio" name="payment_method" value="credit/debit"> Credit/Debit</label><br>
+          <label><input type="radio" name="payment_method" value="e-wallet"> E-wallet</label>
+        </div>
+        <!-- Hidden container for selected cart_item_ids[] -->
+        <div id="selectedCartItems"></div>
+        <div class="checkout-btn-row" style="margin-top: 1em;">
+          <button type="button" id="cancelCheckoutBtn">Cancel</button>
+          <button type="submit" id="confirmCheckoutBtn">Confirm Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- FOR LOGOUT OPTION -->
   <div id="logoutModal" class="logout-modal">
@@ -437,7 +466,72 @@ if ($buyer_id) {
       </div>
     </div>
   </div>
+
+  <!-- THIS IS FOR THE POP-UPS -->
   <script>
+    // CHECKOUT LOGIC
+    document.querySelector('.check-out-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const selectedItems = [];
+      const selectedCartItemIds = [];
+      document.querySelectorAll('.cart-item').forEach(function(item) {
+        const checkbox = item.querySelector('.item-check-box');
+        if (checkbox && checkbox.checked) {
+          selectedItems.push({
+            name: item.querySelector('.product-info h4').textContent,
+            size: item.querySelector('.size').textContent,
+            color: item.querySelector('.color').textContent,
+            quantity: item.querySelector('.qty-text').textContent,
+            price: item.querySelector('.discounted-price').textContent,
+            total: item.querySelector('.total-ptice').textContent
+          });
+          selectedCartItemIds.push(checkbox.value);
+        }
+      });
+
+      if (selectedItems.length === 0) {
+        alert('Please select at least one product to check out.');
+        return;
+      }
+
+      const checkoutItemsDiv = document.getElementById('checkoutItems');
+      checkoutItemsDiv.innerHTML = '';
+      selectedItems.forEach(function(item) {
+        checkoutItemsDiv.innerHTML += `
+      <div class="checkout-item">
+        <strong>${item.name}</strong><br>
+        Size: ${item.size}, Color: ${item.color}<br>
+        Quantity: ${item.quantity}<br>
+        Price: PHP ${item.price}<br>
+        Total: PHP ${item.total}
+      </div>
+    `;
+      });
+
+      const selectedCartItemsDiv = document.getElementById('selectedCartItems');
+      selectedCartItemsDiv.innerHTML = '';
+      selectedCartItemIds.forEach(function(id) {
+        selectedCartItemsDiv.innerHTML += `<input type="hidden" name="cart_item_ids[]" value="${id}">`;
+      });
+
+      document.getElementById('checkoutModal').style.display = 'flex';
+    });
+
+    document.getElementById('closeCheckoutModal').onclick = function() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    };
+    document.getElementById('cancelCheckoutBtn').onclick = function() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    };
+
+    window.onclick = function(event) {
+      const modal = document.getElementById('checkoutModal');
+      if (event.target === modal) {
+        modal.style.display = 'none';
+      }
+    };
+
     // Show modal on logout click
     document.getElementById("logout").addEventListener("click", function(e) {
       e.preventDefault();
@@ -470,6 +564,18 @@ if ($buyer_id) {
             window.location.href = "settings.php";
           }
         });
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('success') === '1') {
+        alert('Checkout successful! Your order has been placed.');
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+      if (params.get('error') === '1') {
+        alert('Checkout failed. Please try again.');
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
     });
   </script>

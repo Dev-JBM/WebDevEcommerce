@@ -31,6 +31,16 @@ if (!$product) {
   exit;
 }
 
+$sold_qty = 0;
+if ($product) {
+  $pid = intval($product['product_id']);
+  $sold_query = "SELECT COALESCE(SUM(quantity), 0) AS sold_qty FROM order_items WHERE product_id = $pid";
+  $sold_result = mysqli_query($conn, $sold_query);
+  if ($sold_row = mysqli_fetch_assoc($sold_result)) {
+    $sold_qty = $sold_row['sold_qty'];
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -118,7 +128,7 @@ if (!$product) {
                 </div>
                 <p class="qty-rating">
                   <span class="qty-number">| 0 </span>Ratings
-                  <span class="sales-number">| 0 </span>Sold
+                  <span class="sales-number">| <?= intval($sold_qty) ?> </span>Sold
                 </p>
               </div>
             </div>
@@ -534,7 +544,6 @@ if (!$product) {
         e.preventDefault();
       }
     });
-
   </script>
 
   <!-- FOR LOGOUT OPTION -->
