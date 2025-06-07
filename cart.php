@@ -120,6 +120,7 @@ if ($buyer_id) {
   <title>Wear Dyans</title>
   <link rel="stylesheet" href="style/cart.css">
   <link rel="stylesheet" href="style/cart-list.css">
+  <link rel="stylesheet" href="style/checkout.css">
   <link rel="stylesheet" href="style/profilePic.css">
   <link rel="stylesheet" href="style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">

@@ -761,3 +761,8 @@ select{
 .sub-menu-text:hover {
   font-weight: bold;
 }
+
+.out-of-stock {
+  color: #e74c3c !important;
+  font-weight: bold;
+}

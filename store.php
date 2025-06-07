@@ -198,6 +198,13 @@ $imagePath = (!empty($user['image']))
                       <p><?= intval($product['sales']) ?> Sold</p>
                     </div>
                   </div>
+                  <div class="product-stock-status">
+                    <?php if (intval($product['stock_quantity']) > 0): ?>
+                      <span class="stock-available"><?= intval($product['stock_quantity']) ?> in stock</span>
+                    <?php else: ?>
+                      <span class="stock-out">Out of stock</span>
+                    <?php endif; ?>
+                  </div>
                 </div>
               </div>
             </a>

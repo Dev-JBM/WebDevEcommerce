@@ -391,3 +391,20 @@ select{
 .sub-menu-text:hover {
   font-weight: bold;
 }
+
+.product-stock-status {
+  margin-top: 2px;
+  font-size: 1em;
+  font-weight: 500;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.stock-available {
+  color: #2ecc40; /* green */
+}
+
+.stock-out {
+  color: #e74c3c; /* red */
+  font-weight: bold;
+}

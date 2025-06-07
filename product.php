@@ -19,15 +19,15 @@ $imagePath = (!empty($user['image']))
 
 // --- PRODUCT FETCHING BASED ON ID ---
 $product = null;
-if (isset($_GET['id'])) {
-  $product_id = intval($_GET['id']);
+if (isset($_GET['id']) || isset($_GET['product_id'])) {
+  $product_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_GET['product_id']);
   $product_query = "SELECT * FROM products WHERE product_id = $product_id LIMIT 1";
   $product_result = mysqli_query($conn, $product_query);
   $product = mysqli_fetch_assoc($product_result);
 }
 
 if (!$product) {
-  echo "<h2 style='text-align:center;'>Product not found.</h2>";
+  echo "<script>alert('Product not found.'); window.location.href='store.php';</script>";
   exit;
 }
 
@@ -41,6 +41,13 @@ if ($product) {
   }
 }
 
+if (isset($_GET['success'])) {
+  echo "<script>alert('Order placed successfully!');</script>";
+}
+if (isset($_GET['error'])) {
+  echo "<script>alert('There was an error processing your order.');</script>";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +58,7 @@ if ($product) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans | Product</title>
   <link rel="stylesheet" href="style/product.css">
+  <link rel="stylesheet" href="style/checkout.css">
   <link rel="stylesheet" href="style/profilePic.css">
   <link rel="stylesheet" href="style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
@@ -184,7 +192,11 @@ if ($product) {
                 <p class="qty-text">1</p>
                 <img src="images/add-plus-svgrepo-com.svg">
               </div>
-              <p class="available-text"><span><?= intval($product['stock_quantity']) ?></span> pieces available</p>
+              <?php if (intval($product['stock_quantity']) > 0): ?>
+                <p class="available-text"><span><?= intval($product['stock_quantity']) ?></span> pieces available</p>
+              <?php else: ?>
+                <p class="available-text out-of-stock" style="color: #e74c3c; font-weight: bold;">Out of stock</p>
+              <?php endif; ?>
             </div>
 
             <div class="btns-product-right-container">
@@ -350,6 +362,7 @@ if ($product) {
     let selectedSize = null;
     let selectedColor = null;
     let productQty = 1;
+    const stockAvailable = <?= intval($product['stock_quantity']) ?>;
 
     // TOGGLE MENU
     let subMenu = document.getElementById("subMenu");
@@ -533,11 +546,17 @@ if ($product) {
       });
     });
 
+    // OUT OF STOCK CHECKER
     document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-
       document.getElementById('cartSize').value = selectedSize;
       document.getElementById('cartColor').value = selectedColor;
       document.getElementById('cartQty').value = productQty;
+
+      if (stockAvailable === 0) {
+        alert('This product is OUT OF STOCK and cannot be added to cart.');
+        e.preventDefault();
+        return;
+      }
 
       if (!selectedSize || !selectedColor || productQty < 1) {
         alert('Please select a size, color, and valid quantity.');
@@ -545,6 +564,36 @@ if ($product) {
       }
     });
   </script>
+
+  <!-- FOR CHECKOUT -->
+  <div id="checkoutModal" class="checkout-modal" style="display:none;">
+    <div class="checkout-modal-content">
+      <span class="close-modal" id="closeCheckoutModal">&times;</span>
+      <h2>Order Summary</h2>
+      <form id="checkoutForm" method="post" action="features/buy-now.php">
+        <div id="checkoutItems"></div>
+        <div class="buyer-address">
+          <h3>Shipping Address</h3>
+          <p id="buyerAddress"><?= htmlspecialchars($user['address'] ?? 'No address on file') ?></p>
+          <input type="hidden" name="shipping_address" value="<?= htmlspecialchars($user['address'] ?? '') ?>">
+          <input type="hidden" name="buyer_id" value="<?= htmlspecialchars($user['user_id'] ?? '') ?>">
+        </div>
+        <div class="payment-method">
+          <h3>Payment Method</h3>
+          <label><input type="radio" name="payment_method" value="cash on delivery" checked> Cash on Delivery</label><br>
+          <label><input type="radio" name="payment_method" value="credit/debit"> Credit/Debit</label><br>
+          <label><input type="radio" name="payment_method" value="e-wallet"> E-wallet</label>
+        </div>
+        <!-- Hidden container for selected cart_item_ids[] -->
+        <div id="selectedCartItems"></div>
+        <div class="checkout-btn-row" style="margin-top: 1em;">
+          <button type="button" id="cancelCheckoutBtn">Cancel</button>
+          <button type="submit" id="confirmCheckoutBtn">Confirm Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 
   <!-- FOR LOGOUT OPTION -->
   <div id="logoutModal" class="logout-modal">
@@ -562,7 +611,57 @@ if ($product) {
       </div>
     </div>
   </div>
+
+  <!-- FOR POP-UPS -->
   <script>
+    // CHECKOUT LOGIC FOR "BUY NOW" BUTTON ON PRODUCT PAGE
+    document.querySelector('.btn-buy').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (!selectedSize || !selectedColor || productQty < 1) {
+        alert('Please select a size, color, and valid quantity.');
+        return;
+      }
+      if (stockAvailable === 0) {
+        alert('This product is OUT OF STOCK and cannot be purchased.');
+        return;
+      }
+
+      const productName = document.querySelector('.product-name p').textContent;
+      const productPrice = document.querySelector('.new-price').textContent.replace('PHP', '').trim();
+      const total = (parseFloat(productPrice.replace(/,/g, '')) * productQty).toFixed(2);
+
+      const checkoutItemsDiv = document.getElementById('checkoutItems');
+      checkoutItemsDiv.innerHTML = `
+    <div class="checkout-item">
+      <strong>${productName}</strong><br>
+      Size: ${selectedSize}, Color: ${selectedColor}<br>
+      Quantity: ${productQty}<br>
+      Price: PHP ${productPrice}<br>
+      Total: PHP ${total}
+    </div>
+  `;
+
+      const selectedCartItemsDiv = document.getElementById('selectedCartItems');
+      selectedCartItemsDiv.innerHTML = `
+    <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']) ?>">
+    <input type="hidden" name="size" value="${selectedSize}">
+    <input type="hidden" name="color" value="${selectedColor}">
+    <input type="hidden" name="quantity" value="${productQty}">
+    <input type="hidden" name="price" value="${productPrice}">
+    <input type="hidden" name="total" value="${total}">
+  `;
+
+      document.getElementById('checkoutModal').style.display = 'flex';
+    });
+
+    document.getElementById('closeCheckoutModal').addEventListener('click', function() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    });
+    document.getElementById('cancelCheckoutBtn').addEventListener('click', function() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    });
+
+    // LOGOUT LOGIC
     // Show modal on logout click
     document.getElementById("logout").addEventListener("click", function(e) {
       e.preventDefault();
