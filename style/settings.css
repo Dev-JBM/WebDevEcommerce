@@ -436,7 +436,7 @@ button img {
   color: white;
   height: 50px;
   width: 250px;
-  font-size: 1.6em;
+  font-size: 1.3em;
   text-align: left;
   text-align: center;
   border: 1px solid #000;
@@ -447,12 +447,14 @@ button img {
 .my-orders-content td,
 .earnings-content td {
   border: 1px solid #ddd;
-  font-size: 1.5em;
+  font-size: 1.3em;
   border: 1px solid #000;
   padding: 10px;
 }
 
-.my-products-content table {
+.my-products-content table,
+.orders-content table,
+.my-orders-content table {
   width: 1200px;
   margin: 0 auto;
   border-collapse: collapse;
@@ -463,18 +465,26 @@ button img {
 }
 
 .my-products-content th,
-.my-products-content td {
+.orders-content th,
+.my-orders-content th,
+.my-products-content td,
+.orders-content td,
+.my-orders-content td {
   padding: 12px 14px;
   font-size: 1.1em;
 }
 
-.my-products-content th {
+.my-products-content th,
+.orders-content th,
+.my-orders-content th {
   background: #73a1b1;
   color: #fff;
   font-size: 1.1em;
 }
 
-.my-products-content td {
+.my-products-content td,
+.orders-content td,
+.my-orders-content td {
   background: #fff;
 }
 
@@ -757,10 +767,22 @@ button img {
   background-color: #7e2727;
 }
 
+/* Review button uses edit-button style */
+.review-btn {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+.my-orders-content td:last-child {
+  text-align: center;
+  vertical-align: middle;
+}
+
 #clothesType-container,
 #accessoriesType-container {
   display: none;
 }
+
 
 /* --- Profile/Menu Side by Side --- */
 .profile-menu-wrapper {

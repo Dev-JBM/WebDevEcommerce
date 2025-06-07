@@ -440,7 +440,7 @@ $imagePath = (!empty($user['image']))
           </form>
         </div>
       </div>
-      
+
       <div class="orders">
         <div class="title">
           <p>Orders</p>
@@ -450,22 +450,55 @@ $imagePath = (!empty($user['image']))
           <table>
             <thead>
               <tr>
-                <th>Product</th>
                 <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Product</th>
                 <th>Buyer</th>
-                <th>Order Status</th>
+                <th>Total Amount</th>
+                <th>Payment Method</th>
               </tr>
             </thead>
             <tbody>
+              <?php
+              $seller_id = $user['user_id'];
+              $query = "
+                SELECT 
+                  o.order_id,
+                  o.order_date,
+                  p.name AS product_name,
+                  u.username AS buyer_username,
+                  o.total_amount,
+                  o.payment_method
+                FROM order_items oi
+                JOIN orders o ON oi.order_id = o.order_id
+                JOIN products p ON oi.product_id = p.product_id
+                JOIN users u ON o.buyer_id = u.user_id
+                WHERE oi.seller_id = ?
+                ORDER BY o.order_date DESC
+                ";
+              $stmt = $conn->prepare($query);
+              $stmt->bind_param("i", $seller_id);
+              $stmt->execute();
+              $result = $stmt->get_result();
 
-              <tr>
-                <td class="orders-product">Fleece Full-Zip Long Sleeve Jacket</td>
-                <td class="orders-order-id">0123</td>
-                <td class="orders-buyer">User123</td>
-                <td class="id-input">----</td>
-              </tr>
-
+              if ($result->num_rows === 0): ?>
+                <tr>
+                  <td colspan="6" style="text-align:center; color:#888;">No orders found.</td>
+                </tr>
+              <?php else: ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                  <tr>
+                    <td><?= htmlspecialchars($row['order_id']) ?></td>
+                    <td><?= htmlspecialchars($row['order_date']) ?></td>
+                    <td><?= htmlspecialchars($row['product_name']) ?></td>
+                    <td><?= htmlspecialchars($row['buyer_username']) ?></td>
+                    <td>PHP <?= number_format($row['total_amount'], 2) ?></td>
+                    <td><?= htmlspecialchars($row['payment_method']) ?></td>
+                  </tr>
+                <?php endwhile; ?>
+              <?php endif; ?>
             </tbody>
+
           </table>
         </div>
       </div>
@@ -480,20 +513,53 @@ $imagePath = (!empty($user['image']))
             <thead>
               <tr>
                 <th>Product</th>
+                <th>Order Date</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total Price</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
+              <?php
+              $buyer_id = $user['user_id'];
+              $query = "
+                SELECT 
+                  p.product_id,
+                  p.name AS product_name,
+                  o.order_date,
+                  oi.price_at_purchase,
+                  oi.quantity,
+                  (oi.price_at_purchase * oi.quantity) AS total_price
+                FROM orders o
+                JOIN order_items oi ON o.order_id = oi.order_id
+                JOIN products p ON oi.product_id = p.product_id
+                WHERE o.buyer_id = ?
+                ORDER BY o.order_date DESC
+              ";
+              $stmt = $conn->prepare($query);
+              $stmt->bind_param("i", $buyer_id);
+              $stmt->execute();
+              $result = $stmt->get_result();
 
-              <tr>
-                <td class="my-orders-product">Fleece Full-Zip Long Sleeve Jacket</td>
-                <td class="my-orders-price">PHP 1000.00</td>
-                <td class="my-orders-quantity">5</td>
-                <td class="my-orders-total">PHP 5000.00</td>
-              </tr>
-
+              if ($result->num_rows === 0): ?>
+                <tr>
+                  <td colspan="6" style="text-align:center; color:#888;">No orders found.</td>
+                </tr>
+              <?php else: ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                  <tr>
+                    <td><?= htmlspecialchars($row['product_name']) ?></td>
+                    <td><?= htmlspecialchars($row['order_date']) ?></td>
+                    <td>PHP <?= number_format($row['price_at_purchase'], 2) ?></td>
+                    <td><?= htmlspecialchars($row['quantity']) ?></td>
+                    <td>PHP <?= number_format($row['total_price'], 2) ?></td>
+                    <td>
+                      <button class="edit-button review-btn" onclick="window.location.href='review_product.php?product_id=<?= htmlspecialchars($row['product_id']) ?>'">Review</button>
+                    </td>
+                  </tr>
+                <?php endwhile; ?>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>
@@ -508,21 +574,46 @@ $imagePath = (!empty($user['image']))
           <table>
             <thead>
               <tr>
-                <th>Total Earnings</th>
-                <th>Pending Payments</th>
+                <th>Product Name</th>
                 <th>Total Orders</th>
                 <th>Stocks Sold</th>
+                <th>Total Earnings</th>
               </tr>
             </thead>
             <tbody>
+              <?php
+              $seller_id = $user['user_id'];
+              $query = "
+                SELECT 
+                  p.name AS product_name,
+                  COUNT(DISTINCT oi.order_id) AS total_orders,
+                  SUM(oi.quantity) AS stocks_sold,
+                  SUM(oi.price_at_purchase * oi.quantity) AS total_earnings
+                FROM products p
+                LEFT JOIN order_items oi ON p.product_id = oi.product_id
+                WHERE p.seller_id = ?
+                GROUP BY p.product_id
+                ORDER BY total_earnings DESC
+            ";
+              $stmt = $conn->prepare($query);
+              $stmt->bind_param("i", $seller_id);
+              $stmt->execute();
+              $result = $stmt->get_result();
 
-              <tr>
-                <td class="my-earnings-total-earnings">PHP 120000.00</td>
-                <td class="my-earnings-pending-payments">10</td>
-                <td class="my-earnings-total-orders">100</td>
-                <td class="mt-earnings-stocks-sold">80</td>
-              </tr>
-
+              if ($result->num_rows === 0): ?>
+                <tr>
+                  <td colspan="4" style="text-align:center; color:#888;">No earnings data found.</td>
+                </tr>
+              <?php else: ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                  <tr>
+                    <td><?= htmlspecialchars($row['product_name']) ?></td>
+                    <td><?= (int)$row['total_orders'] ?></td>
+                    <td><?= (int)$row['stocks_sold'] ?></td>
+                    <td>PHP <?= number_format($row['total_earnings'], 2) ?></td>
+                  </tr>
+                <?php endwhile; ?>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>

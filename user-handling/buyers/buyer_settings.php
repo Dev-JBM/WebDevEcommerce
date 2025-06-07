@@ -351,20 +351,53 @@ $imagePath = (!empty($user['image']))
             <thead>
               <tr>
                 <th>Product</th>
+                <th>Order Date</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total Price</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
+              <?php
+              $buyer_id = $user['user_id'];
+              $query = "
+                SELECT 
+                  p.product_id,
+                  p.name AS product_name,
+                  o.order_date,
+                  oi.price_at_purchase,
+                  oi.quantity,
+                  (oi.price_at_purchase * oi.quantity) AS total_price
+                FROM orders o
+                JOIN order_items oi ON o.order_id = oi.order_id
+                JOIN products p ON oi.product_id = p.product_id
+                WHERE o.buyer_id = ?
+                ORDER BY o.order_date DESC
+              ";  
+              $stmt = $conn->prepare($query);
+              $stmt->bind_param("i", $buyer_id);
+              $stmt->execute();
+              $result = $stmt->get_result();
 
-              <tr>
-                <td class="my-orders-product">Fleece Full-Zip Long Sleeve Jacket</td>
-                <td class="my-orders-price">PHP 1000.00</td>
-                <td class="my-orders-quantity">5</td>
-                <td class="my-orders-total">PHP 5000.00</td>
-              </tr>
-
+              if ($result->num_rows === 0): ?>
+                <tr>
+                  <td colspan="6" style="text-align:center; color:#888;">No orders found.</td>
+                </tr>
+              <?php else: ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                  <tr>
+                    <td><?= htmlspecialchars($row['product_name']) ?></td>
+                    <td><?= htmlspecialchars($row['order_date']) ?></td>
+                    <td>PHP <?= number_format($row['price_at_purchase'], 2) ?></td>
+                    <td><?= htmlspecialchars($row['quantity']) ?></td>
+                    <td>PHP <?= number_format($row['total_price'], 2) ?></td>
+                    <td style="text-align:center; vertical-align:middle;">
+                      <button class="edit-button review-btn" onclick="window.location.href='../../review_product.php?product_id=<?= htmlspecialchars($row['product_id']) ?>'">Review</button>
+                    </td>
+                  </tr>
+                <?php endwhile; ?>
+              <?php endif; ?>
             </tbody>
           </table>
         </div>
