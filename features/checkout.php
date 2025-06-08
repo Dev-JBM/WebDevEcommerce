@@ -12,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['cart_item_ids']) && 
     $payment_method = $_POST['payment_method'];
     $buyer_id = intval($_POST['buyer_id']); // Pass this as a hidden field or get from session/profile
 
-    // Get buyer address (you may want to fetch this from the DB)
     $address = $_POST['shipping_address'] ?? '';
 
     // Calculate total amount and gather order items
@@ -37,9 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['cart_item_ids']) && 
     $order_stmt->execute();
     $order_id = $order_stmt->insert_id;
 
-    // Insert into order_items and update product stock
     foreach ($order_items as $item) {
-        // Insert order item
+
         $oi_stmt = $conn->prepare("INSERT INTO order_items (order_id, product_id, seller_id, quantity, price_at_purchase, size, color) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $oi_stmt->bind_param(
             "iiiidss",
@@ -59,12 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['cart_item_ids']) && 
         $stock_stmt->execute();
     }
 
-    // Remove items from cart
     $del_stmt = $conn->prepare("DELETE FROM cart_items WHERE cart_item_id IN ($placeholders)");
     $del_stmt->bind_param($types, ...$cart_item_ids);
     $del_stmt->execute();
 
-    // Redirect to orders page or show success
     header("Location: ../cart.php?success=1");
     exit;
 } else {

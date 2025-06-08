@@ -354,6 +354,7 @@ $imagePath = (!empty($user['image']))
                 <th>Order Date</th>
                 <th>Price</th>
                 <th>Quantity</th>
+                <th>Product Variation</th>
                 <th>Total Price</th>
                 <th>Actions</th>
               </tr>
@@ -362,19 +363,22 @@ $imagePath = (!empty($user['image']))
               <?php
               $buyer_id = $user['user_id'];
               $query = "
-                SELECT 
-                  p.product_id,
-                  p.name AS product_name,
-                  o.order_date,
-                  oi.price_at_purchase,
-                  oi.quantity,
-                  (oi.price_at_purchase * oi.quantity) AS total_price
-                FROM orders o
-                JOIN order_items oi ON o.order_id = oi.order_id
-                JOIN products p ON oi.product_id = p.product_id
-                WHERE o.buyer_id = ?
-                ORDER BY o.order_date DESC
-              ";  
+      SELECT 
+        p.product_id,
+        oi.order_item_id,
+        p.name AS product_name,
+        o.order_date,
+        oi.price_at_purchase,
+        oi.quantity,
+        oi.size,
+        oi.color,
+        (oi.price_at_purchase * oi.quantity) AS total_price
+      FROM orders o
+      JOIN order_items oi ON o.order_id = oi.order_id
+      JOIN products p ON oi.product_id = p.product_id
+      WHERE o.buyer_id = ?
+      ORDER BY o.order_date DESC
+      ";
               $stmt = $conn->prepare($query);
               $stmt->bind_param("i", $buyer_id);
               $stmt->execute();
@@ -382,7 +386,7 @@ $imagePath = (!empty($user['image']))
 
               if ($result->num_rows === 0): ?>
                 <tr>
-                  <td colspan="6" style="text-align:center; color:#888;">No orders found.</td>
+                  <td colspan="7" style="text-align:center; color:#888;">No orders found.</td>
                 </tr>
               <?php else: ?>
                 <?php while ($row = $result->fetch_assoc()): ?>
@@ -391,9 +395,13 @@ $imagePath = (!empty($user['image']))
                     <td><?= htmlspecialchars($row['order_date']) ?></td>
                     <td>PHP <?= number_format($row['price_at_purchase'], 2) ?></td>
                     <td><?= htmlspecialchars($row['quantity']) ?></td>
+                    <td>
+                      <?= htmlspecialchars($row['size']) ?> /
+                      <?= htmlspecialchars($row['color']) ?>
+                    </td>
                     <td>PHP <?= number_format($row['total_price'], 2) ?></td>
-                    <td style="text-align:center; vertical-align:middle;">
-                      <button class="edit-button review-btn" onclick="window.location.href='../../review_product.php?product_id=<?= htmlspecialchars($row['product_id']) ?>'">Review</button>
+                    <td>
+                      <button class="edit-button review-btn" onclick="window.location.href='../../features/review_product.php?product_id=<?= htmlspecialchars($row['product_id']) ?>&order_item_id=<?= htmlspecialchars($row['order_item_id']) ?>'">Review</button>
                     </td>
                   </tr>
                 <?php endwhile; ?>

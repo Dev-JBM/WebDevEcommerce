@@ -36,13 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt->close();
 
-        // Insert into orders
         $order_stmt = $conn->prepare("INSERT INTO orders (buyer_id, total_amount, shipping_address, payment_method) VALUES (?, ?, ?, ?)");
         $order_stmt->bind_param("idss", $buyer_id, $total, $address, $payment_method);
         $order_stmt->execute();
         $order_id = $order_stmt->insert_id;
 
-        // Insert into order_items
         $oi_stmt = $conn->prepare("INSERT INTO order_items (order_id, product_id, seller_id, quantity, price_at_purchase, size, color) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $oi_stmt->bind_param(
             "iiiidss",
@@ -87,13 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $order_items[] = $row;
         }
 
-        // Insert into orders
         $order_stmt = $conn->prepare("INSERT INTO orders (buyer_id, total_amount, shipping_address, payment_method) VALUES (?, ?, ?, ?)");
         $order_stmt->bind_param("idss", $buyer_id, $total_amount, $address, $payment_method);
         $order_stmt->execute();
         $order_id = $order_stmt->insert_id;
 
-        // Insert into order_items and update product stock
         foreach ($order_items as $item) {
             $oi_stmt = $conn->prepare("INSERT INTO order_items (order_id, product_id, seller_id, quantity, price_at_purchase, size, color) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $oi_stmt->bind_param(

@@ -32,6 +32,20 @@ if (!$product) {
     echo "Product not found or you do not have permission to edit this product.";
     exit;
 }
+
+    $order_item_id = isset($_GET['order_item_id']) ? intval($_GET['order_item_id']) : 0;
+    $order_size = '';
+    $order_color = '';
+
+    if ($order_item_id > 0) {
+        $oi_query = "SELECT size, color FROM order_items WHERE order_item_id = $order_item_id LIMIT 1";
+        $oi_result = mysqli_query($conn, $oi_query);
+        if ($oi_row = mysqli_fetch_assoc($oi_result)) {
+            $order_size = $oi_row['size'];
+            $order_color = $oi_row['color'];
+        }
+    }
+
 $stmt->close();
 ?>
 

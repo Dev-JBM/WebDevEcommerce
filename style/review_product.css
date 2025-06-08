@@ -1,0 +1,38 @@
+.star-rating {
+    direction: rtl;
+    display: flex;
+    gap: 2px;
+    font-size: 2.8em;
+    justify-content: flex-start;
+  }
+  .star-rating input[type="radio"] {
+    display: none;
+  }
+  .star-rating label {
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .star-rating label:before {
+    content: "\f005";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    display: inline-block;
+  }
+  .star-rating input[type="radio"]:checked ~ label,
+  .star-rating label:hover,
+  .star-rating label:hover ~ label {
+    color: #FFD700;
+  }
+
+  .input-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  #rating-container {
+    margin-left: -340px;
+  }
