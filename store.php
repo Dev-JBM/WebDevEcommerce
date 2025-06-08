@@ -16,9 +16,11 @@ $productQuery = "
   SELECT 
     p.*, 
     COALESCE(SUM(oi.quantity), 0) AS sales,
-    COALESCE(SUM(oi.quantity * oi.price_at_purchase), 0) AS sold_value
+    COALESCE(SUM(oi.quantity * oi.price_at_purchase), 0) AS sold_value,
+    ROUND(AVG(r.rating), 1) AS avg_rating
   FROM products p
   LEFT JOIN order_items oi ON p.product_id = oi.product_id
+  LEFT JOIN product_reviews r ON p.product_id = r.product_id
   GROUP BY p.product_id
 ";
 
@@ -182,17 +184,44 @@ $imagePath = (!empty($user['image']))
                   </div>
                   <div class="product-bottom-text">
                     <div class="product-rating">
-                      <p><!-- To be followed --></p>
-                      <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                        </defs>
-                        <use href="#star" x="0" y="5" />
-                        <use href="#star" x="25" y="5" />
-                        <use href="#star" x="50" y="5" />
-                        <use href="#star" x="75" y="5" />
-                        <use href="#star" x="100" y="5" />
-                      </svg>
+                      <p>
+                        <?php if ($product['avg_rating'] !== null): ?>
+                          <?= htmlspecialchars($product['avg_rating']) ?>
+                        <?php else: ?>
+                          No ratings yet
+                        <?php endif; ?>
+                      </p>
+                      <?php if ($product['avg_rating'] !== null): ?>
+                        <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg">
+                          <defs>
+                            <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
+                          </defs>
+                          <?php
+                          $fullStars = floor($product['avg_rating']);
+                          $hasHalfStar = ($product['avg_rating'] - $fullStars) > 0;
+                          $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                          $starX = 0;
+                          for ($i = 0; $i < $fullStars; $i++, $starX += 25) {
+                            echo '<use href="#star" x="' . $starX . '" y="5" fill="#FFD700"/>';
+                          }
+                          if ($hasHalfStar) {
+                            echo '
+                              <defs>
+                                <linearGradient id="halfGrad" x1="0" x2="1" y1="0" y2="0">
+                                  <stop offset="50%" stop-color="#FFD700"/>
+                                  <stop offset="50%" stop-color="#ccc"/>
+                                </linearGradient>
+                              </defs>
+                              <use href="#star" x="' . $starX . '" y="5" fill="url(#halfGrad)"/>
+                  ';
+                            $starX += 25;
+                          }
+                          for ($i = 0; $i < $emptyStars; $i++, $starX += 25) {
+                            echo '<use href="#star" x="' . $starX . '" y="5" fill="#ccc"/>';
+                          }
+                          ?>
+                        </svg>
+                      <?php endif; ?>
                     </div>
                     <div class="product-sales">
                       <p><?= intval($product['sales']) ?> Sold</p>

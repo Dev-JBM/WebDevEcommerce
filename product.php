@@ -39,7 +39,31 @@ if ($product) {
   if ($sold_row = mysqli_fetch_assoc($sold_result)) {
     $sold_qty = $sold_row['sold_qty'];
   }
+
+  $rating_query = "SELECT ROUND(AVG(rating), 1) AS avg_rating, COUNT(*) AS num_ratings FROM product_reviews WHERE product_id = $pid";
+  $rating_result = mysqli_query($conn, $rating_query);
+  $rating_data = mysqli_fetch_assoc($rating_result);
+  $avg_rating = $rating_data['avg_rating'] !== null ? floatval($rating_data['avg_rating']) : null;
+  $num_ratings = intval($rating_data['num_ratings']);
 }
+
+$sort_order = (isset($_GET['sort']) && $_GET['sort'] === 'asc') ? 'ASC' : 'DESC'; // Default: DESC (most recent first)
+$reviews = [];
+if ($product) {
+  $pid = intval($product['product_id']);
+  $review_query = "
+        SELECT r.*, u.username, u.image
+        FROM product_reviews r
+        JOIN users u ON r.buyer_id = u.user_id
+        WHERE r.product_id = $pid
+        ORDER BY r.review_date $sort_order
+    ";
+  $review_result = mysqli_query($conn, $review_query);
+  while ($row = mysqli_fetch_assoc($review_result)) {
+    $reviews[] = $row;
+  }
+}
+
 
 if (isset($_GET['success'])) {
   echo "<script>alert('Order placed successfully!');</script>";
@@ -121,21 +145,40 @@ if (isset($_GET['error'])) {
 
             <div>
               <div class="product-rating">
-                <div class="rating">0.0
-                  <!-- Placeholder for rating stars -->
-                  <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                    </defs>
-                    <use href="#star" x="0" y="5" />
-                    <use href="#star" x="25" y="5" />
-                    <use href="#star" x="50" y="5" />
-                    <use href="#star" x="75" y="5" />
-                    <use href="#star" x="100" y="5" />
-                  </svg>
+                <div class="rating">
+                  <?php if ($avg_rating !== null): ?>
+                    <?= htmlspecialchars($avg_rating) ?>
+                    <svg viewBox="0 0 140 30" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+                      <defs>
+                        <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
+                        <linearGradient id="halfGrad" x1="0" x2="1" y1="0" y2="0">
+                          <stop offset="50%" stop-color="#FFD700" />
+                          <stop offset="50%" stop-color="#ccc" />
+                        </linearGradient>
+                      </defs>
+                      <?php
+                      $fullStars = floor($avg_rating);
+                      $hasHalfStar = ($avg_rating - $fullStars) > 0;
+                      $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                      $starX = 0;
+                      for ($i = 0; $i < $fullStars; $i++, $starX += 25) {
+                        echo '<use href="#star" x="' . $starX . '" y="5" fill="#FFD700"/>';
+                      }
+                      if ($hasHalfStar) {
+                        echo '<use href="#star" x="' . $starX . '" y="5" fill="url(#halfGrad)"/>';
+                        $starX += 25;
+                      }
+                      for ($i = 0; $i < $emptyStars; $i++, $starX += 25) {
+                        echo '<use href="#star" x="' . $starX . '" y="5" fill="#ccc"/>';
+                      }
+                      ?>
+                    </svg>
+                  <?php else: ?>
+                    No ratings yet
+                  <?php endif; ?>
                 </div>
                 <p class="qty-rating">
-                  <span class="qty-number">| 0 </span>Ratings
+                  <span class="qty-number">| <?= $num_ratings ?> </span>Ratings
                   <span class="sales-number">| <?= intval($sold_qty) ?> </span>Sold
                 </p>
               </div>
@@ -280,22 +323,41 @@ if (isset($_GET['error'])) {
                 <div class="rating-sort-box">
                   <div class="avg-rating">
                     <p>Avg. Rating:</p>
-                    <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
-                      <defs>
-                        <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                      </defs>
-                      <use href="#star" x="0" y="5" />
-                      <use href="#star" x="25" y="5" />
-                      <use href="#star" x="50" y="5" />
-                      <use href="#star" x="75" y="5" />
-                      <use href="#star" x="100" y="5" />
-                    </svg>
-                    <p class="num-stars">5/5 <span class="qty-product-ratings">(25)</span></p>
+                    <?php if ($avg_rating !== null): ?>
+                      <svg viewBox="0 0 140 30" width="140" height="30" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
+                          <linearGradient id="halfGrad" x1="0" x2="1" y1="0" y2="0">
+                            <stop offset="50%" stop-color="#FFD700" />
+                            <stop offset="50%" stop-color="#ccc" />
+                          </linearGradient>
+                        </defs>
+                        <?php
+                        $ratingValue = round($avg_rating * 2) / 2;
+                        $fullStars = floor($ratingValue);
+                        $hasHalfStar = ($ratingValue - $fullStars) == 0.5;
+                        $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                        $starX = 0;
+                        for ($i = 0; $i < $fullStars; $i++, $starX += 25) {
+                          echo '<use href="#star" x="' . $starX . '" y="5" fill="#FFD700"/>';
+                        }
+                        if ($hasHalfStar) {
+                          echo '<use href="#star" x="' . $starX . '" y="5" fill="url(#halfGrad)"/>';
+                          $starX += 25;
+                        }
+                        for ($i = 0; $i < $emptyStars; $i++, $starX += 25) {
+                          echo '<use href="#star" x="' . $starX . '" y="5" fill="#ccc"/>';
+                        }
+                        ?>
+                      </svg>
+                      <p class="num-stars"><?= htmlspecialchars($avg_rating) ?>/5 <span class="qty-product-ratings">(<?= $num_ratings ?>)</span></p>
+                    <?php else: ?>
+                      <span>No ratings yet</span>
+                    <?php endif; ?>
                   </div>
-
                   <div class="sort-rating">
                     <div class="products-sort">
-                      <div class="dropdown">
+                      <div class="dropdown" style="display: none;">
                         <img class="arrow-down" src="./images/arrow-down-338-svgrepo-com.svg">
                         <img class="arrow-up" src="./images/arrow-up-338-svgrepo-com.svg">
                         <label for="filter">Sort Ratings by:</label>
@@ -305,10 +367,9 @@ if (isset($_GET['error'])) {
                           <option value="Sales">Sales</option>
                         </select>
                       </div>
-
                       <div class="sort-button">
-                        <img class="asc" src="./images/sort-from-bottom-to-top-svgrepo-com.svg">
-                        <img class="desc" src="./images/sort-from-top-to-bottom-svgrepo-com.svg">
+                        <img class="asc" src="./images/sort-from-bottom-to-top-svgrepo-com.svg" style="cursor:pointer; display:inline;">
+                        <img class="desc" src="./images/sort-from-top-to-bottom-svgrepo-com.svg" style="cursor:pointer; display:none;">
                       </div>
                     </div>
                   </div>
@@ -316,39 +377,57 @@ if (isset($_GET['error'])) {
               </div>
 
               <div class="feedback-box">
-                <div class="feedback-top-container">
-                  <div class="profile-box">
-
-                    <div class="profile-pic">
-                      <img src="./images/profile-circle-svgrepo-com.png">
+                <?php if (count($reviews) === 0): ?>
+                  <div style="color:#888; text-align:center; margin:2em 0;">No reviews yet.</div>
+                <?php else: ?>
+                  <?php foreach ($reviews as $review): ?>
+                    <div class="feedback-item">
+                      <div class="feedback-top-container">
+                        <div class="profile-box">
+                          <div class="profile-pic">
+                            <img src="<?= !empty($review['image']) ? './images/profiles/' . htmlspecialchars($review['image']) : './images/profile-circle-svgrepo-com.png' ?>">
+                          </div>
+                          <div class="name-container">
+                            <p class="name"><?= htmlspecialchars($review['username']) ?></p>
+                            <svg viewBox="0 0 140 30" width="140" height="30" xmlns="http://www.w3.org/2000/svg">
+                              <defs>
+                                <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
+                                <linearGradient id="halfGrad" x1="0" x2="1" y1="0" y2="0">
+                                  <stop offset="50%" stop-color="#FFD700" />
+                                  <stop offset="50%" stop-color="#ccc" />
+                                </linearGradient>
+                              </defs>
+                              <?php
+                              $ratingValue = round($review['rating'] * 2) / 2;
+                              $fullStars = floor($ratingValue);
+                              $hasHalfStar = ($ratingValue - $fullStars) == 0.5;
+                              $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                              $starX = 0;
+                              for ($i = 0; $i < $fullStars; $i++, $starX += 25) {
+                                echo '<use href="#star" x="' . $starX . '" y="5" fill="#FFD700"/>';
+                              }
+                              if ($hasHalfStar) {
+                                echo '<use href="#star" x="' . $starX . '" y="5" fill="url(#halfGrad)"/>';
+                                $starX += 25;
+                              }
+                              for ($i = 0; $i < $emptyStars; $i++, $starX += 25) {
+                                echo '<use href="#star" x="' . $starX . '" y="5" fill="#ccc"/>';
+                              }
+                              ?>
+                            </svg>
+                          </div>
+                        </div>
+                        <div class="date">
+                          <p><?= date('n/j/Y g:i A', strtotime($review['review_date'])) ?></p>
+                        </div>
+                      </div>
+                      <div class="feedback-bottom-container" style="text-align:left;">
+                        <p class="variation-feedback">Variation: <span class="feedback-size"><?= htmlspecialchars($review['size']) ?></span>, <span class="feedback-color"><?= htmlspecialchars($review['color']) ?></span></p>
+                        <p class="comment"><?= nl2br(htmlspecialchars($review['review_text'])) ?></p>
+                      </div>
                     </div>
-
-                    <div class="name-container">
-                      <p class="name">user123</p>
-                      <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                          <polygon id="star" points="10,0 12.6,6.5 20,7.5 14.5,12.5 16,20 10,16 4,20 5.5,12.5 0,7.5 7.4,6.5" />
-                        </defs>
-                        <use href="#star" x="0" y="5" />
-                        <use href="#star" x="25" y="5" />
-                        <use href="#star" x="50" y="5" />
-                        <use href="#star" x="75" y="5" />
-                        <use href="#star" x="100" y="5" />
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div class="date">
-                    <p>3/22/2025</p>
-                  </div>
-
-                </div>
-
-                <div class="feedback-bottom-container">
-                  <p class="variation-feedback">Variation: <span class="feedback-size">M</span>, <span class="feedback-color">Green</span></p>
-                  <p class="comment">This fleece jacket is both stylish and functional. The bicolor design adds a trendy touch, making it easy to pair with different outfits. The material is soft, warm, and perfect for chilly weather. The fit is true to size, and the zipper feels sturdy. Great for casual wear or layering in colder months. Highly recommended!</p>
-                </div>
-
+                  <?php endforeach; ?>
+                <?php endif; ?>
               </div>
             </div>
           </div>
@@ -401,18 +480,42 @@ if (isset($_GET['error'])) {
       select.blur();
     });
 
-    // ASC and DESC button
-    const asc = document.querySelector(".asc");
-    const desc = document.querySelector(".desc");
+    // ASC and DESC button sorting logic
+    document.addEventListener('DOMContentLoaded', function() {
+      const asc = document.querySelector(".sort-button .asc");
+      const desc = document.querySelector(".sort-button .desc");
+      const feedbackBox = document.querySelector('.feedback-box');
 
-    desc.addEventListener("click", () => {
-      desc.style.display = "none";
-      asc.style.display = "inline";
-    });
+      function parseDate(dateStr) {
+        // Assumes format n/j/Y (e.g., 6/9/2025)
+        const parts = dateStr.split('/');
+        return new Date(dateStr);
+      }
 
-    asc.addEventListener("click", () => {
-      asc.style.display = "none";
-      desc.style.display = "inline";
+      function sortReviews(order) {
+        const items = Array.from(feedbackBox.querySelectorAll('.feedback-item'));
+        items.sort((a, b) => {
+          const dateA = parseDate(a.querySelector('.date p').textContent);
+          const dateB = parseDate(b.querySelector('.date p').textContent);
+          return order === 'asc' ? dateA - dateB : dateB - dateA;
+        });
+        items.forEach(item => feedbackBox.appendChild(item));
+      }
+
+      if (asc && desc && feedbackBox) {
+        asc.addEventListener("click", function(e) {
+          e.preventDefault();
+          asc.style.display = "none";
+          desc.style.display = "inline";
+          sortReviews('asc');
+        });
+        desc.addEventListener("click", function(e) {
+          e.preventDefault();
+          desc.style.display = "none";
+          asc.style.display = "inline";
+          sortReviews('desc');
+        });
+      }
     });
 
     // ROLE CHECKER
