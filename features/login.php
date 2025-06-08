@@ -20,8 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($result && mysqli_num_rows($result) === 1) {
         $user = mysqli_fetch_assoc($result);
 
-        if (password_verify($password, $user['password_hash'])) {
+        // Check if account is suspended
+        if (isset($user['is_active']) && $user['is_active'] == 0) {
+            $message = "Your account has been SUSPENDED. Please contact support.";
+        } elseif (password_verify($password, $user['password_hash'])) {
             $_SESSION['username'] = $user['username'];
+            $_SESSION['user_id'] = $user['user_id'];
             // Role-based redirection
             if (isset($user['role'])) {
                 if ($user['role'] === 'admin') {

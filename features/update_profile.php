@@ -3,15 +3,15 @@ header('Content-Type: application/json');
 session_start();
 require_once 'db-connection.php';
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'Not logged in.']);
     exit;
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
 
-$username = $_SESSION['username'];
-$query = "SELECT * FROM users WHERE username = '$username' LIMIT 1";
+$user_id = intval($_SESSION['user_id']);
+$query = "SELECT * FROM users WHERE user_id = $user_id LIMIT 1";
 $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
 
@@ -67,8 +67,7 @@ if (
 
 if ($updates) {
     $updates[] = "updated_at = NOW()";
-    $sql = "UPDATE users SET " . implode(', ', $updates) . " WHERE username = '$username'";
-    if (mysqli_query($conn, $sql)) {
+    $sql = "UPDATE users SET " . implode(', ', $updates) . " WHERE user_id = $user_id";    if (mysqli_query($conn, $sql)) {
         echo json_encode(['success' => true]);
         exit;
     } else {

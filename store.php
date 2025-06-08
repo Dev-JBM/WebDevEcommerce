@@ -117,8 +117,8 @@ $imagePath = (!empty($user['image']))
 
           <div class="filter-section">
             <h3>Clothes</h3>
-            <label><input type="checkbox" name="clothes" value="T-shirts"> T-shirt</label><br>
-            <label><input type="checkbox" name="clothes" value="Polo Shirts"> Polo Shirt</label><br>
+            <label><input type="checkbox" name="clothes" value="T-shirt"> T-shirt</label><br>
+            <label><input type="checkbox" name="clothes" value="Polo Shirt"> Polo Shirt</label><br>
             <label><input type="checkbox" name="clothes" value="Polo"> Polo</label><br>
             <label><input type="checkbox" name="clothes" value="Long Sleeve"> Long Sleeve</label><br>
             <label><input type="checkbox" name="clothes" value="Jacket"> Jacket</label><br>

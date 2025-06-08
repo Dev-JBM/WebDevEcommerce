@@ -206,7 +206,7 @@ select{
   max-height: 475px;
   margin-top: 20px;
   padding-top: 10px;
-  padding-left: 35px;
+  padding-left: 20px;
   overflow-y: scroll;
   scrollbar-color: #B7B7B7 transparent;
 }
@@ -272,7 +272,7 @@ select{
 
 .product-price{
   color: #7E2727;
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 5px;
 }
 

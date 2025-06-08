@@ -19,6 +19,81 @@ p {
   margin: 0;
 }
 
+/* Admin Sidebar Styles */
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 230px;
+  height: 100vh;
+  background: #3a2f2f;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 32px;
+  z-index: 100;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+}
+
+.admin-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.admin-profile img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  border: 2px solid #fff;
+  background: #fff;
+}
+
+.admin-profile h2 {
+  font-size: 1.2rem;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  color: #fff;
+  font-weight: 600;
+}
+
+.admin-nav-list {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.admin-nav-list li {
+  width: 100%;
+}
+
+.admin-nav-list a {
+  display: block;
+  width: 100%;
+  padding: 14px 32px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.08rem;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.18s, color 0.18s;
+}
+
+.admin-nav-list a:hover,
+.admin-nav-list a.active {
+  background: #fff;
+  color: #3a2f2f;
+  font-weight: 600;
+  border-radius: 15px;
+}
+
+main {
+  margin-left: 230px;
+}
+
 .header {
   position: sticky;
   top: 0;
@@ -260,6 +335,20 @@ section{
   margin-bottom: 20px;
 }
 
+.sort-button{
+  margin-left: 5px;
+}
+
+.sort-button img{
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.asc{
+  display: none;
+}
+
 .users-table{
   width: 100%;
   border-collapse: collapse;
@@ -273,15 +362,15 @@ section{
   color: white;
   height: 50px;
   width: 250px;
-  font-size: 1.6em;
+  font-size: 1.2em;
   text-align: left;
   text-align: center;
   border: 1px solid #000;
 }
 
 .users-table td{
-    border: 1px solid #ddd;
-  font-size: 1.5em;
+  border: 1px solid #ddd;
+  font-size: 1.1em;
   border: 1px solid #000;
   padding: 10px;
 }
@@ -303,11 +392,14 @@ section{
   text-align: center;
 }
 
-.users-table td:nth-child(6){
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
+.state-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.state-badge {
+  display: inline-block;
+  margin: 0 auto;
 }
 
 .remove-button{
@@ -327,4 +419,114 @@ section{
 
 .remove-button:active{
   background-color: #7E2727;
+}
+
+/* ===== FOR BUYER.PHP ===== */
+.my-orders {
+  background: #f0e9e1;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  padding: 2em;
+  margin-top: 2em;
+}
+
+.orders-header {
+  font-size: 1.3em;
+  margin-bottom: 1em;
+  font-weight: 600;
+}
+
+.orders-table-container {
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th, .orders-table td {
+  padding: 0.75em 1em;
+  border-bottom: 1px solid #e0e0e0;
+  text-align: left;
+}
+
+.orders-table th {
+  background: #f7f7f7;
+  font-weight: 600;
+}
+
+.state-badge {
+  display: inline-block;
+  min-width: 70px;
+  text-align: center;
+  padding: 0.25em 0.8em;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.98em;
+  vertical-align: middle;
+  background: #f7f7f7;
+}
+
+.state-active {
+  color: #27ae60;
+  background: #eafaf1;
+}
+
+.state-suspended {
+  color: #e74c3c;
+  background: #ffeaea;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.4em 1em;
+  border-radius: 6px;
+  font-size: 0.98em;
+  text-decoration: none;
+  margin-right: 0.5em;
+  transition: background 0.15s;
+}
+
+.btn-view {
+  background: #3498db;
+  color: #fff;
+}
+
+.btn-suspend {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-reactivate {
+  background: #27ae60;
+  color: #fff;
+}
+
+/* Design for filter dropdowns under Sort Products */
+#filterGender, #filterCategory, #filterType {
+  padding: 2px 1.5em 2px 0.7em;
+  font-size: 0.92em;
+  height: 40px;
+  line-height: 1.2;
+  border: 1.5px solid #7ba0b6;
+  border-radius: 8px;
+  background: #f7fafc url('data:image/svg+xml;utf8,<svg fill="gray" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 0.75em center/1.2em;
+  color: #333;
+  outline: none;
+  appearance: none;
+  min-width: 140px;
+  transition: border-color 0.2s;
+  margin-right: 0.5em;
+  box-sizing: border-box;
+}
+
+#filterGender:focus, #filterCategory:focus, #filterType:focus {
+  border-color: #3b6e8c;
+  background-color: #eaf4fa;
+}
+
+.order-view-btn-td {
+  text-align: center;
+  vertical-align: middle;
 }
