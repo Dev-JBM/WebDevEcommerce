@@ -121,12 +121,12 @@ $imagePath = (!empty($user['image']))
             <label><input type="checkbox" name="clothes" value="Polo Shirts"> Polo Shirt</label><br>
             <label><input type="checkbox" name="clothes" value="Polo"> Polo</label><br>
             <label><input type="checkbox" name="clothes" value="Long Sleeve"> Long Sleeve</label><br>
-            <label><input type="checkbox" name="clothes" value="Jackets"> Jacket</label><br>
-            <label><input type="checkbox" name="clothes" value="Hoodies"> Hoodie</label><br>
+            <label><input type="checkbox" name="clothes" value="Jacket"> Jacket</label><br>
+            <label><input type="checkbox" name="clothes" value="Hoodie"> Hoodie</label><br>
             <label><input type="checkbox" name="clothes" value="Pants"> Pants</label><br>
-            <label><input type="checkbox" name="clothes" value="Shorts"> Short</label><br>
+            <label><input type="checkbox" name="clothes" value="Short"> Short</label><br>
             <label><input type="checkbox" name="clothes" value="Underwear"> Underwear</label><br>
-            <label><input type="checkbox" name="clothes" value="Socks"> Sock</label>
+            <label><input type="checkbox" name="clothes" value="Sock"> Sock</label>
           </div>
 
           <div class="filter-section">
