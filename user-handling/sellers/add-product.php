@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: /homepage.php");
@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $fileName = uniqid() . "_" . basename($file['name']);
-    $target = "../../images/products/" . $fileName;
+    $target = "/images/products/" . $fileName;
 
     if (!move_uploaded_file($file['tmp_name'], $target)) {
         die("Failed to upload product image.");
@@ -72,6 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt->execute();
     $stmt->close();
 
-    echo "<script>alert('Product added successfully!');window.location.href='../sellers/seller_settings.php';</script>";
+    echo "<script>alert('Product added successfully!');window.location.href='/user-handling/sellers/seller_settings.php';</script>";
     exit;
 }

@@ -21,6 +21,7 @@ $productQuery = "
   FROM products p
   LEFT JOIN order_items oi ON p.product_id = oi.product_id
   LEFT JOIN product_reviews r ON p.product_id = r.product_id
+  WHERE p.is_active = 1
   GROUP BY p.product_id
 ";
 
@@ -30,8 +31,8 @@ while ($row = mysqli_fetch_assoc($productResult)) {
 }
 
 $imagePath = (!empty($user['image']))
-  ? 'images/profiles/' . $user['image']
-  : './images/profile-circle-svgrepo-com.png';
+  ? '/images/profiles/' . $user['image']
+  : '/images/profile-circle-svgrepo-com.png';
 ?>
 
 <!DOCTYPE html>
@@ -41,9 +42,9 @@ $imagePath = (!empty($user['image']))
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans | Store</title>
-  <link rel="stylesheet" href="style/store.css">
-  <link rel="stylesheet" href="style/profilePic.css">
-  <link rel="stylesheet" href="style/logout.css">
+  <link rel="stylesheet" href="/style/store.css">
+  <link rel="stylesheet" href="/style/profilePic.css">
+  <link rel="stylesheet" href="/style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -55,11 +56,11 @@ $imagePath = (!empty($user['image']))
 
     <div class="search-bar">
       <input type="text" id="productSearch" placeholder="Search">
-      <img id="searchBtn" src="images/search-svgrepo-com.png" style="cursor:pointer;">
+      <img id="searchBtn" src="/images/search-svgrepo-com.png" style="cursor:pointer;">
     </div>
 
     <div class="right-header">
-      <a href="cart.php"><img src="images/SVGRepo_iconCarrier.png"></a>
+      <a href="cart.php"><img src="/images/SVGRepo_iconCarrier.png"></a>
       <img class="profile" src="<?= htmlspecialchars($imagePath); ?>">
       <div class="sub-menu-wrap" id="subMenu">
         <div class="sub-menu">
@@ -93,13 +94,13 @@ $imagePath = (!empty($user['image']))
   <section>
     <div class="ads-section">
       <div class="ads-container">
-        <img src="images/image 27.png">
+        <img src="/images/image 27.png">
       </div>
 
-      <img class="next-button" src="images/next.png">
-      <img class="prev-button" src="images/prev.png">
+      <img class="next-button" src="/images/next.png">
+      <img class="prev-button" src="/images/prev.png">
 
-      <img class="ads-pages" src="images/ads_pages.png">
+      <img class="ads-pages" src="/images/ads_pages.png">
     </div>
 
     <div class="products-section">
@@ -145,8 +146,8 @@ $imagePath = (!empty($user['image']))
       <div class="products-container">
         <div class="products-sort">
           <div class="dropdown">
-            <img class="arrow-down" src="./images/arrow-down-338-svgrepo-com.svg">
-            <img class="arrow-up" src="./images/arrow-up-338-svgrepo-com.svg">
+            <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+            <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
             <label for="filter">Sort by:</label>
             <select id="filter" name="filter">
               <option value="Popular">Popular</option>
@@ -156,8 +157,8 @@ $imagePath = (!empty($user['image']))
           </div>
 
           <div class="sort-button">
-            <img class="asc" src="./images/sort-from-bottom-to-top-svgrepo-com.svg">
-            <img class="desc" src="./images/sort-from-top-to-bottom-svgrepo-com.svg">
+            <img class="asc" src="/images/sort-from-bottom-to-top-svgrepo-com.svg">
+            <img class="desc" src="/images/sort-from-top-to-bottom-svgrepo-com.svg">
           </div>
         </div>
 
@@ -173,7 +174,7 @@ $imagePath = (!empty($user['image']))
                 data-rating="0">
 
                 <div class="product-img">
-                  <img src="<?= !empty($product['image_path']) ? './images/products/' . htmlspecialchars($product['image_path']) : './images/product_image.png' ?>" alt="Product Image">
+                  <img src="<?= !empty($product['image_path']) ? '/images/products/' . htmlspecialchars($product['image_path']) : '/images/product_image.png' ?>" alt="Product Image">
                 </div>
                 <div class="product-text">
                   <div class="product-name">
@@ -478,7 +479,7 @@ $imagePath = (!empty($user['image']))
 
     // Logout on "Yes"
     document.getElementById("logoutYes").addEventListener("click", function() {
-      window.location.href = "./features/logout.php";
+      window.location.href = "/features/logout.php";
     });
   </script>
 
@@ -554,9 +555,9 @@ $imagePath = (!empty($user['image']))
         settingsLink.addEventListener("click", function(e) {
           e.preventDefault();
           if (userRole === "buyer") {
-            window.location.href = "./user-handling/buyers/buyer_settings.php";
+            window.location.href = "/user-handling/buyers/buyer_settings.php";
           } else if (userRole === "seller") {
-            window.location.href = "./user-handling/sellers/seller_settings.php";
+            window.location.href = "/user-handling/sellers/seller_settings.php";
           } else {
             window.location.href = "settings.php";
           }

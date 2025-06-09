@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (isset($_SESSION['user_id'])) {
     $adminId = $_SESSION['user_id'];
@@ -14,8 +14,8 @@ if (isset($_SESSION['user_id'])) {
         $user = $row;
         $adminUsername = htmlspecialchars($row['username']);
         $adminImage = !empty($row['image'])
-            ? '../../images/profiles/' . htmlspecialchars($row['image'])
-            : '../../images/profile-circle-svgrepo-com.png';
+            ? '/images/profiles/' . htmlspecialchars($row['image'])
+            : '/images/profile-circle-svgrepo-com.png';
     }
 }
 
@@ -277,14 +277,19 @@ if (!empty($orderIds)) {
                 // Fill products table
                 let productsHtml = '';
                 order.items.forEach(function(item) {
+                    console.log(item);
+                    // Remove commas from price string before parsing
+                    const price = parseFloat((item.price_at_purchase || '0').toString().replace(/,/g, '')) || 0;
+                    const qty = parseInt(item.quantity) || 0;
+                    const total = price * qty;
                     productsHtml += `<tr>
-                <td>${item.product_name}</td>
-                <td>${item.quantity}</td>
-                <td>${item.size || '-'}</td>
-                <td>${item.color || '-'}</td>
-                <td>₱${Number(item.price_at_purchase * item.quantity).toLocaleString(undefined, {minimumFractionDigits:2})}</td>
-                <td>${item.seller_username || '-'}</td>
-            </tr>`;
+        <td>${item.product_name}</td>
+        <td>${qty}</td>
+        <td>${item.size || '-'}</td>
+        <td>${item.color || '-'}</td>
+        <td>₱${total.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+        <td>${item.seller_username || '-'}</td>
+    </tr>`;
                 });
                 document.getElementById('orderModalProductsBody').innerHTML = productsHtml;
 
@@ -369,10 +374,6 @@ if (!empty($orderIds)) {
             });
         }
 
-        ['filterGender', 'filterCategory', 'filterType'].forEach(id => {
-            document.getElementById(id).addEventListener('change', filterProducts);
-        });
-
         // Show modal on logout click
         document.getElementById("logout").addEventListener("click", function(e) {
             e.preventDefault();
@@ -386,7 +387,7 @@ if (!empty($orderIds)) {
 
         // Logout on "Yes"
         document.getElementById("logoutYes").addEventListener("click", function() {
-            window.location.href = "../../features/logout.php";
+            window.location.href = "/features/logout.php";
         });
     </script>
 </body>

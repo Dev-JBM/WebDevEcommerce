@@ -14,8 +14,8 @@ $result = mysqli_query($conn, $query);
 $user = mysqli_fetch_assoc($result);
 
 $imagePath = (!empty($user['image']))
-  ? 'images/profiles/' . $user['image']
-  : './images/profile-circle-svgrepo-com.png';
+  ? '/images/profiles/' . $user['image']
+  : '/images/profile-circle-svgrepo-com.png';
 
 // --- PRODUCT FETCHING BASED ON ID ---
 $product = null;
@@ -81,10 +81,10 @@ if (isset($_GET['error'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans | Product</title>
-  <link rel="stylesheet" href="style/product.css">
-  <link rel="stylesheet" href="style/checkout.css">
-  <link rel="stylesheet" href="style/profilePic.css">
-  <link rel="stylesheet" href="style/logout.css">
+  <link rel="stylesheet" href="/style/product.css">
+  <link rel="stylesheet" href="/style/checkout.css">
+  <link rel="stylesheet" href="/style/profilePic.css">
+  <link rel="stylesheet" href="/style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -97,11 +97,11 @@ if (isset($_GET['error'])) {
 
       <div class="search-bar">
         <input type="text" id="productSearch" placeholder="Search">
-        <img id="searchBtn" src="images/search-svgrepo-com.png" style="cursor:pointer;">
+        <img id="searchBtn" src="/images/search-svgrepo-com.png" style="cursor:pointer;">
       </div>
 
       <div class="right-header">
-        <a href="cart.php"><img src="images/SVGRepo_iconCarrier.png"></a>
+        <a href="cart.php"><img src="/images/SVGRepo_iconCarrier.png"></a>
         <img class="profile" src="<?= htmlspecialchars($imagePath); ?>" onclick="toggleMenu()" alt="profile">
         <div class="sub-menu-wrap" id="subMenu">
           <div class="sub-menu">
@@ -136,7 +136,7 @@ if (isset($_GET['error'])) {
       <div class="product-section">
         <div class="item-container">
           <div class="product-left-container">
-            <img src="<?= !empty($product['image_path']) ? './images/products/' . htmlspecialchars($product['image_path']) : './images/prdouct.png' ?>" alt="Product Image">
+            <img src="<?= !empty($product['image_path']) ? '/images/products/' . htmlspecialchars($product['image_path']) : '/images/product.png' ?>" alt="Product Image">
           </div>
           <div class="product-right-container">
             <div class="product-name">
@@ -231,9 +231,9 @@ if (isset($_GET['error'])) {
 
             <div class="product-qty-container">
               <div class="product-qty">
-                <img src="images/minus-svgrepo-com.svg">
+                <img src="/images/minus-svgrepo-com.svg">
                 <p class="qty-text">1</p>
-                <img src="images/add-plus-svgrepo-com.svg">
+                <img src="/images/add-plus-svgrepo-com.svg">
               </div>
               <?php if (intval($product['stock_quantity']) > 0): ?>
                 <p class="available-text"><span><?= intval($product['stock_quantity']) ?></span> pieces available</p>
@@ -250,7 +250,7 @@ if (isset($_GET['error'])) {
                 <input type="hidden" name="color" id="cartColor">
                 <input type="hidden" name="quantity" id="cartQty">
                 <button type="submit" class="btn-cart">
-                  <img src="images/SVGRepo_iconCarrier_brown.png">
+                  <img src="/images/SVGRepo_iconCarrier_brown.png">
                   Add to Cart
                 </button>
               </form>
@@ -358,8 +358,8 @@ if (isset($_GET['error'])) {
                   <div class="sort-rating">
                     <div class="products-sort">
                       <div class="dropdown" style="display: none;">
-                        <img class="arrow-down" src="./images/arrow-down-338-svgrepo-com.svg">
-                        <img class="arrow-up" src="./images/arrow-up-338-svgrepo-com.svg">
+                        <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                        <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                         <label for="filter">Sort Ratings by:</label>
                         <select id="filter" name="filter">
                           <option value="Popular">Popular</option>
@@ -368,8 +368,8 @@ if (isset($_GET['error'])) {
                         </select>
                       </div>
                       <div class="sort-button">
-                        <img class="asc" src="./images/sort-from-bottom-to-top-svgrepo-com.svg" style="cursor:pointer; display:inline;">
-                        <img class="desc" src="./images/sort-from-top-to-bottom-svgrepo-com.svg" style="cursor:pointer; display:none;">
+                        <img class="asc" src="/images/sort-from-bottom-to-top-svgrepo-com.svg" style="cursor:pointer; display:inline;">
+                        <img class="desc" src="/images/sort-from-top-to-bottom-svgrepo-com.svg" style="cursor:pointer; display:none;">
                       </div>
                     </div>
                   </div>
@@ -385,7 +385,7 @@ if (isset($_GET['error'])) {
                       <div class="feedback-top-container">
                         <div class="profile-box">
                           <div class="profile-pic">
-                            <img src="<?= !empty($review['image']) ? './images/profiles/' . htmlspecialchars($review['image']) : './images/profile-circle-svgrepo-com.png' ?>">
+                            <img src="<?= !empty($review['image']) ? '/images/profiles/' . htmlspecialchars($review['image']) : './images/profile-circle-svgrepo-com.png' ?>">
                           </div>
                           <div class="name-container">
                             <p class="name"><?= htmlspecialchars($review['username']) ?></p>
@@ -528,9 +528,9 @@ if (isset($_GET['error'])) {
         settingsLink.addEventListener("click", function(e) {
           e.preventDefault();
           if (userRole === "buyer") {
-            window.location.href = "./user-handling/buyers/buyer_settings.php";
+            window.location.href = "/user-handling/buyers/buyer_settings.php";
           } else if (userRole === "seller") {
-            window.location.href = "./user-handling/sellers/seller_settings.php";
+            window.location.href = "/user-handling/sellers/seller_settings.php";
           } else {
             window.location.href = "settings.php";
           }
@@ -778,7 +778,7 @@ if (isset($_GET['error'])) {
 
     // Logout on "Yes"
     document.getElementById("logoutYes").addEventListener("click", function() {
-      window.location.href = "./features/logout.php";
+      window.location.href = "/features/logout.php";
     });
   </script>
 </body>

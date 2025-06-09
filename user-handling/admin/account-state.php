@@ -1,7 +1,7 @@
 <?php
 // filepath: /home/jb_magtoto/Projects/WebDevEcommerce/user-handling/admin/suspend-account.php
 session_start();
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (!isset($_GET['id']) || !isset($_GET['role']) || !isset($_GET['action'])) {
     header('Location: buyers.php');

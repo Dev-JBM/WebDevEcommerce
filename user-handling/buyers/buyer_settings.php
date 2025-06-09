@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
   header("Location: /homepage.php");
@@ -33,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["fileImg"]["name"])) 
 }
 
 $imagePath = (!empty($user['image']))
-  ? '../../images/profiles/' . $user['image']
-  : '../../images/profile-circle-svgrepo-com.png';
+  ? '/images/profiles/' . $user['image']
+  : '/images/profile-circle-svgrepo-com.png';
 ?>
 
 <!DOCTYPE html>
@@ -401,7 +401,7 @@ $imagePath = (!empty($user['image']))
                     </td>
                     <td>PHP <?= number_format($row['total_price'], 2) ?></td>
                     <td>
-                      <button class="edit-button review-btn" onclick="window.location.href='../../features/review_product.php?product_id=<?= htmlspecialchars($row['product_id']) ?>&order_item_id=<?= htmlspecialchars($row['order_item_id']) ?>'">Review</button>
+                      <button class="edit-button review-btn" onclick="window.location.href='/features/review_product.php?product_id=<?= htmlspecialchars($row['product_id']) ?>&order_item_id=<?= htmlspecialchars($row['order_item_id']) ?>'">Review</button>
                     </td>
                   </tr>
                 <?php endwhile; ?>
@@ -637,7 +637,7 @@ $imagePath = (!empty($user['image']))
         return;
       }
       if (file.type === 'application/pdf') {
-        previewImage.src = '../../images/pdf-icon.png'; // Use a PDF icon in your images folder
+        previewImage.src = '/images/pdf-icon.png'; // Use a PDF icon in your images folder
         previewImage.classList.remove('hidden');
         uploadText.classList.add('hidden');
         removeButton.classList.remove('hidden');
@@ -773,7 +773,7 @@ $imagePath = (!empty($user['image']))
       }
       // --- END PASSWORD CHECK CODE ---
 
-      fetch('../../features/update_profile.php', {
+      fetch('/features/update_profile.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -908,7 +908,7 @@ $imagePath = (!empty($user['image']))
 
     // Logout on "Yes"
     document.getElementById("logoutYes").addEventListener("click", function() {
-      window.location.href = "../../features/logout.php";
+      window.location.href = "/features/logout.php";
     });
   </script>
 </body>

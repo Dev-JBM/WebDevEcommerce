@@ -112,9 +112,15 @@ if ($order_item_id > 0) {
         <div class="add-product" style="display: flex; max-width: 1250px;">
             <div class="title" style="display: flex; align-items: center; justify-content: space-between;">
                 <p>Review Product</p>
-                <a href="/user-handling/sellers/seller_settings.php" style="margin-left:auto; margin-right: 40px; color: #FF7F7F; font-size: 0.5em;">
-                    < Back to Settings
-                        </a>
+                <?php
+                $settingsHref = '/user-handling/buyers/buyer_settings.php';
+                if (isset($user['role']) && $user['role'] === 'seller') {
+                    $settingsHref = '/user-handling/sellers/seller_settings.php';
+                }
+                ?>
+                <a href="<?= $settingsHref ?>" style="margin-left:auto; margin-right: 40px; color: #FF7F7F; font-size: 0.5em;">
+                    &lt; Back to Settings
+                </a>
             </div>
             <div class="edit-product-content">
                 <form id="editProductForm" enctype="multipart/form-data" method="post" action="submit-review.php" onsubmit="return confirmReview()"> <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['product_id']) ?>">
@@ -224,7 +230,7 @@ if ($order_item_id > 0) {
 
         // Logout on "Yes"
         document.getElementById("logoutYes").addEventListener("click", function() {
-            window.location.href = "../../features/logout.php";
+            window.location.href = "/features/logout.php";
         });
     </script>
 </body>

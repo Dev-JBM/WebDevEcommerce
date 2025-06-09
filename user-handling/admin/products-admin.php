@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (isset($_SESSION['user_id'])) {
     $adminId = $_SESSION['user_id'];
@@ -14,8 +14,8 @@ if (isset($_SESSION['user_id'])) {
         $user = $row;
         $adminUsername = htmlspecialchars($row['username']);
         $adminImage = !empty($row['image'])
-            ? '../../images/profiles/' . htmlspecialchars($row['image'])
-            : '../../images/profile-circle-svgrepo-com.png';
+            ? '/images/profiles/' . htmlspecialchars($row['image'])
+            : '/images/profile-circle-svgrepo-com.png';
     }
 }
 
@@ -46,6 +46,7 @@ $productsResult = mysqli_query($conn, "
         u.user_id AS seller_id, u.username AS seller_username, u.email AS seller_email
     FROM products p
     JOIN users u ON p.seller_id = u.user_id
+    WHERE p.is_active = 1
     ORDER BY p.created_at DESC
 ");
 $products = [];
@@ -294,144 +295,145 @@ if ($productsResult) {
                 </table>
             </div>
         </div>
+    </div>
 
-        <!-- FOR LOGOUT OPTION -->
-        <div id="logoutModal" class="logout-modal">
-            <div class="logout-modal-content">
-                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" style="margin-bottom: 1em;">
-                    <circle cx="12" cy="12" r="12" fill="#ffe5e5" />
-                    <path d="M12 8v4" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" />
-                    <circle cx="12" cy="16" r="1" fill="#e74c3c" />
-                </svg>
-                <p class="logout-modal-title">Log Out?</p>
-                <p class="logout-modal-desc">Are you sure you want to logout?</p>
-                <div class="logout-modal-actions">
-                    <button id="logoutYes" class="logout-btn logout-btn-yes">Yes</button>
-                    <button id="logoutNo" class="logout-btn logout-btn-no">No</button>
-                </div>
+    <!-- FOR LOGOUT OPTION -->
+    <div id="logoutModal" class="logout-modal">
+        <div class="logout-modal-content">
+            <svg width="48" height="48" fill="none" viewBox="0 0 24 24" style="margin-bottom: 1em;">
+                <circle cx="12" cy="12" r="12" fill="#ffe5e5" />
+                <path d="M12 8v4" stroke="#e74c3c" stroke-width="2" stroke-linecap="round" />
+                <circle cx="12" cy="16" r="1" fill="#e74c3c" />
+            </svg>
+            <p class="logout-modal-title">Log Out?</p>
+            <p class="logout-modal-desc">Are you sure you want to logout?</p>
+            <div class="logout-modal-actions">
+                <button id="logoutYes" class="logout-btn logout-btn-yes">Yes</button>
+                <button id="logoutNo" class="logout-btn logout-btn-no">No</button>
             </div>
         </div>
-        <script>
-            document.querySelectorAll('.view-product-btn').forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.getElementById('productModalImg').src = btn.dataset.image;
-                    document.getElementById('productModalName').textContent = btn.dataset.name;
-                    document.getElementById('productModalId').textContent = btn.dataset.product_id;
-                    document.getElementById('productModalDescription').textContent = btn.dataset.description || '-';
-                    document.getElementById('productModalPrice').textContent = btn.dataset.price;
-                    document.getElementById('productModalStock').textContent = btn.dataset.stock;
-                    document.getElementById('productModalGender').textContent = btn.dataset.gender || '-';
-                    document.getElementById('productModalCategory').textContent = btn.dataset.category || '-';
-                    document.getElementById('productModalType').textContent = btn.dataset.type || '-';
-                    document.getElementById('productModalSizes').textContent = btn.dataset.sizes || '-';
-                    document.getElementById('productModalColors').textContent = btn.dataset.colors || '-';
-                    document.getElementById('productModalSeller').textContent = btn.dataset.seller;
-                    document.getElementById('productModalSellerEmail').textContent = btn.dataset.seller_email;
-                    document.getElementById('productModalCreated').textContent = btn.dataset.created;
-                    document.getElementById('productModalUpdated').textContent = btn.dataset.updated;
-                    document.getElementById('productModal').style.display = 'flex';
-                });
-            });
-
-            document.getElementById('productModalClose').onclick = function() {
-                document.getElementById('productModal').style.display = 'none';
-            };
-            window.onclick = function(event) {
-                var modal = document.getElementById('productModal');
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            };
-
-
-            // Sort functionality
-            const ascBtn = document.getElementById("asc");
-            const descBtn = document.getElementById("desc");
-            const tbody = document.querySelector(".users-table tbody");
-
-            function sortTable(direction = 'desc') {
-                const rows = Array.from(tbody.querySelectorAll("tr")).filter(row => row.querySelector("td"));
-                // Sort by user_id (first column)
-                rows.sort((a, b) => {
-                    const idA = parseInt(a.querySelector("td").textContent.trim());
-                    const idB = parseInt(b.querySelector("td").textContent.trim());
-                    return direction === 'asc' ? idA - idB : idB - idA;
-                });
-                // Remove all rows and re-append in sorted order
-                rows.forEach(row => tbody.appendChild(row));
-            }
-
-            sortTable('desc');
-
-            descBtn.addEventListener("click", () => {
-                descBtn.style.display = "none";
-                ascBtn.style.display = "inline";
-                sortTable('asc');
-            });
-
-            ascBtn.addEventListener("click", () => {
-                ascBtn.style.display = "none";
-                descBtn.style.display = "inline";
-                sortTable('desc');
-            });
-
-
-            // Confirm before suspending an account
-            document.querySelectorAll('.suspend-btn').forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    if (!confirm('Are you sure you want to SUSPEND this account?')) {
-                        e.preventDefault();
-                    }
-                });
-            });
-
-            // Confirm before reactivating an account
-            document.querySelectorAll('.reactivate-btn').forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    if (!confirm('Are you sure you want to REACTIVATE this account?')) {
-                        e.preventDefault();
-                    }
-                });
-            });
-
-
-            function filterProducts() {
-                const gender = document.getElementById('filterGender').value;
-                const category = document.getElementById('filterCategory').value;
-                const type = document.getElementById('filterType').value;
-                document.querySelectorAll('.users-table tbody tr').forEach(row => {
-                    const rowGender = row.getAttribute('data-gender') || '';
-                    const rowCategory = row.getAttribute('data-category') || '';
-                    const rowType = row.getAttribute('data-type') || '';
-                    let show = true;
-                    if (gender && rowGender !== gender) show = false;
-                    if (category && rowCategory !== category) show = false;
-                    if (type && rowType !== type) show = false;
-                    row.style.display = show ? '' : 'none';
-                });
-            }
-
-            ['filterGender', 'filterCategory', 'filterType'].forEach(id => {
-                document.getElementById(id).addEventListener('change', filterProducts);
-            });
-
-            // Show modal on logout click
-            document.getElementById("logout").addEventListener("click", function(e) {
+    </div>
+    <script>
+        document.querySelectorAll('.view-product-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.getElementById("logoutModal").style.display = "flex";
+                document.getElementById('productModalImg').src = btn.dataset.image;
+                document.getElementById('productModalName').textContent = btn.dataset.name;
+                document.getElementById('productModalId').textContent = btn.dataset.product_id;
+                document.getElementById('productModalDescription').textContent = btn.dataset.description || '-';
+                document.getElementById('productModalPrice').textContent = btn.dataset.price;
+                document.getElementById('productModalStock').textContent = btn.dataset.stock;
+                document.getElementById('productModalGender').textContent = btn.dataset.gender || '-';
+                document.getElementById('productModalCategory').textContent = btn.dataset.category || '-';
+                document.getElementById('productModalType').textContent = btn.dataset.type || '-';
+                document.getElementById('productModalSizes').textContent = btn.dataset.sizes || '-';
+                document.getElementById('productModalColors').textContent = btn.dataset.colors || '-';
+                document.getElementById('productModalSeller').textContent = btn.dataset.seller;
+                document.getElementById('productModalSellerEmail').textContent = btn.dataset.seller_email;
+                document.getElementById('productModalCreated').textContent = btn.dataset.created;
+                document.getElementById('productModalUpdated').textContent = btn.dataset.updated;
+                document.getElementById('productModal').style.display = 'flex';
             });
+        });
 
-            // Hide modal on "No"
-            document.getElementById("logoutNo").addEventListener("click", function() {
-                document.getElementById("logoutModal").style.display = "none";
-            });
+        document.getElementById('productModalClose').onclick = function() {
+            document.getElementById('productModal').style.display = 'none';
+        };
+        window.onclick = function(event) {
+            var modal = document.getElementById('productModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
 
-            // Logout on "Yes"
-            document.getElementById("logoutYes").addEventListener("click", function() {
-                window.location.href = "../../features/logout.php";
+
+        // Sort functionality
+        const ascBtn = document.getElementById("asc");
+        const descBtn = document.getElementById("desc");
+        const tbody = document.querySelector(".users-table tbody");
+
+        function sortTable(direction = 'desc') {
+            const rows = Array.from(tbody.querySelectorAll("tr")).filter(row => row.querySelector("td"));
+            // Sort by user_id (first column)
+            rows.sort((a, b) => {
+                const idA = parseInt(a.querySelector("td").textContent.trim());
+                const idB = parseInt(b.querySelector("td").textContent.trim());
+                return direction === 'asc' ? idA - idB : idB - idA;
             });
-        </script>
+            // Remove all rows and re-append in sorted order
+            rows.forEach(row => tbody.appendChild(row));
+        }
+
+        sortTable('desc');
+
+        descBtn.addEventListener("click", () => {
+            descBtn.style.display = "none";
+            ascBtn.style.display = "inline";
+            sortTable('asc');
+        });
+
+        ascBtn.addEventListener("click", () => {
+            ascBtn.style.display = "none";
+            descBtn.style.display = "inline";
+            sortTable('desc');
+        });
+
+
+        // Confirm before suspending an account
+        document.querySelectorAll('.suspend-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                if (!confirm('Are you sure you want to SUSPEND this account?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Confirm before reactivating an account
+        document.querySelectorAll('.reactivate-btn').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                if (!confirm('Are you sure you want to REACTIVATE this account?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+
+        function filterProducts() {
+            const gender = document.getElementById('filterGender').value;
+            const category = document.getElementById('filterCategory').value;
+            const type = document.getElementById('filterType').value;
+            document.querySelectorAll('.users-table tbody tr').forEach(row => {
+                const rowGender = row.getAttribute('data-gender') || '';
+                const rowCategory = row.getAttribute('data-category') || '';
+                const rowType = row.getAttribute('data-type') || '';
+                let show = true;
+                if (gender && rowGender !== gender) show = false;
+                if (category && rowCategory !== category) show = false;
+                if (type && rowType !== type) show = false;
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        ['filterGender', 'filterCategory', 'filterType'].forEach(id => {
+            document.getElementById(id).addEventListener('change', filterProducts);
+        });
+
+        // Show modal on logout click
+        document.getElementById("logout").addEventListener("click", function(e) {
+            e.preventDefault();
+            document.getElementById("logoutModal").style.display = "flex";
+        });
+
+        // Hide modal on "No"
+        document.getElementById("logoutNo").addEventListener("click", function() {
+            document.getElementById("logoutModal").style.display = "none";
+        });
+
+        // Logout on "Yes"
+        document.getElementById("logoutYes").addEventListener("click", function() {
+            window.location.href = "../../features/logout.php";
+        });
+    </script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: /homepage.php");
@@ -20,8 +20,8 @@ $user = mysqli_fetch_assoc($result);
 $seller_id = $user['user_id'];
 
 $imagePath = (!empty($user['image']))
-    ? '../../images/profiles/' . $user['image']
-    : '../../images/profile-circle-svgrepo-com.png';
+    ? '/images/profiles/' . $user['image']
+    : '/images/profile-circle-svgrepo-com.png';
 
 // Fetch product details
 $stmt = $conn->prepare("SELECT * FROM products WHERE product_id = ? AND seller_id = ?");
@@ -530,7 +530,7 @@ $stmt->close();
 
         // Logout on "Yes"
         document.getElementById("logoutYes").addEventListener("click", function() {
-            window.location.href = "../../features/logout.php";
+            window.location.href = "/features/logout.php";
         });
     </script>
 

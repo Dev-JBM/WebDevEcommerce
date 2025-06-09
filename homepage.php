@@ -17,7 +17,7 @@ if (!empty($_SESSION['login_error'])): ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans</title>
-  <link rel="stylesheet" href="style/homepage.css">
+  <link rel="stylesheet" href="/style/homepage.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -70,20 +70,20 @@ if (!empty($_SESSION['login_error'])): ?>
         <div class="login-box">
           <div class="login-header">
             Log In
-            <img class="x-button-login" src="./images/circle-xmark-solid.png">
+            <img class="x-button-login" src="/images/circle-xmark-solid.png">
           </div>
 
           <div class="login-content-container">
             <div class="login-content">
               <div class="login-form-container">
-                <form class="login-form" action="./features/login.php" method="POST">
+                <form class="login-form" action="/features/login.php" method="POST">
                   <input class="login-input" type="text" name="login_username"
                     placeholder="Phone number / Username / Email">
                   <div class="password-container">
                     <input class="password-input" type="password" name="login_password" placeholder="Password">
                     <span class="toggle-password">
-                      <img class="eye-close" src="./images/eye-close-svgrepo-com.svg">
-                      <img class="eye-open" src="./images/eye-2-svgrepo-com.svg">
+                      <img class="eye-close" src="/images/eye-close-svgrepo-com.svg">
+                      <img class="eye-open" src="/images/eye-2-svgrepo-com.svg">
                     </span>
                   </div>
                   <input class="login-submit" type="submit" value="Sign In">
@@ -98,12 +98,12 @@ if (!empty($_SESSION['login_error'])): ?>
 
               <div class="facebook-google-button">
                 <button type="button" class="facebook-button">
-                  <img src="./images/facebook-brands.png">
+                  <img src="/images/facebook-brands.png">
                   Facebook
                 </button>
 
                 <button type="button" class="google-button">
-                  <img src="./images/google-brands.png">
+                  <img src="/images/google-brands.png">
                   Google
                 </button>
               </div>
@@ -121,13 +121,13 @@ if (!empty($_SESSION['login_error'])): ?>
         <div class="register-box">
           <div class="register-header">
             Sign Up
-            <img class="x-button-register" src="./images/circle-xmark-solid.png">
+            <img class="x-button-register" src="/images/circle-xmark-solid.png">
           </div>
 
           <div class="register-content-container">
             <div class="register-content">
               <div class="register-form-container">
-                <form class="register-form" action="./features/register.php" method="POST">
+                <form class="register-form" action="/features/register.php" method="POST">
                   <div class="register-input-container">
                     <input type="text" name="firstname" placeholder="First Name">
                     <input type="text" name="middlename" placeholder="Middle Name">
@@ -140,16 +140,16 @@ if (!empty($_SESSION['login_error'])): ?>
                     <div class="password-container">
                       <input class="password-input" type="password" name="register_password" placeholder="Password">
                       <span class="toggle-password">
-                        <img class="eye-close" src="./images/eye-close-svgrepo-com.svg">
-                        <img class="eye-open" src="./images/eye-2-svgrepo-com.svg">
+                        <img class="eye-close" src="/images/eye-close-svgrepo-com.svg">
+                        <img class="eye-open" src="/images/eye-2-svgrepo-com.svg">
                       </span>
                     </div>
                     <div class="password-container">
                       <input class="password-input" type="password" name="confirm_password"
                         placeholder="Confirm Password">
                       <span class="toggle-password">
-                        <img class="eye-close" src="./images/eye-close-svgrepo-com.svg">
-                        <img class="eye-open" src="./images/eye-2-svgrepo-com.svg">
+                        <img class="eye-close" src="/images/eye-close-svgrepo-com.svg">
+                        <img class="eye-open" src="/images/eye-2-svgrepo-com.svg">
                       </span>
                     </div>
                   </div>
@@ -170,7 +170,7 @@ if (!empty($_SESSION['login_error'])): ?>
 
     <section class="two-section">
       <div class="two-section-box">
-        <img class="product-img" src="./images/goods_469956_sub14_3x4.png" alt="">
+        <img class="product-img" src="/images/goods_469956_sub14_3x4.png" alt="">
         <div class="product-description-box">
           <div class="product-name">
             <p>Fleece Full-Zip Long Sleeve Jacket</p>
@@ -186,9 +186,9 @@ if (!empty($_SESSION['login_error'])): ?>
     <footer>
       <div class="footer-box">
         <div class="footer-icons">
-          <img src="./images/facebook-svgrepo-com.svg">
-          <img src="./images/instagram.png">
-          <img src="./images/twitter.png">
+          <img src="/images/facebook-svgrepo-com.svg">
+          <img src="/images/instagram.png">
+          <img src="/images/twitter.png">
         </div>
         <div class="footer-text">
           <p>©Dyans2025</p>

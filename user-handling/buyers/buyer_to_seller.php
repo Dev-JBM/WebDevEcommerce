@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
     header("Location: /homepage.php");
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
     $fileName = uniqid() . "_" . basename($file['name']);
-    $target = "../../images/valid-files/" . $fileName;
+    $target = "/images/valid-files/" . $fileName;
 
     if (!move_uploaded_file($file['tmp_name'], $target)) {
         die("Failed to upload file.");
@@ -69,6 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     $check->close();
 
-    echo "<script>alert('Application submitted successfully! Your account is now a seller.');window.location.href='../../store.php';</script>";
+    echo "<script>alert('Application submitted successfully! Your account is now a seller.');window.location.href='/store.php';</script>";
     exit;
 }

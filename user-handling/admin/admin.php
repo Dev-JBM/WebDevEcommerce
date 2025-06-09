@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (isset($_SESSION['user_id'])) {
   $adminId = $_SESSION['user_id'];
@@ -9,8 +9,8 @@ if (isset($_SESSION['user_id'])) {
     $user = $row;
     $adminUsername = htmlspecialchars($row['username']);
     $adminImage = !empty($row['image'])
-      ? '../../images/profiles/' . htmlspecialchars($row['image'])
-      : '../../images/profile-circle-svgrepo-com.png';
+      ? '/images/profiles/' . htmlspecialchars($row['image'])
+      : '/images/profile-circle-svgrepo-com.png';
   }
 }
 
@@ -187,7 +187,7 @@ $recentCount = count($recentUsers);
 
     // Logout on "Yes"
     document.getElementById("logoutYes").addEventListener("click", function() {
-      window.location.href = "../../features/logout.php";
+      window.location.href = "/features/logout.php";
     });
 
 

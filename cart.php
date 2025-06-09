@@ -118,11 +118,11 @@ if ($buyer_id) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans</title>
-  <link rel="stylesheet" href="style/cart.css">
-  <link rel="stylesheet" href="style/cart-list.css">
-  <link rel="stylesheet" href="style/checkout.css">
-  <link rel="stylesheet" href="style/profilePic.css">
-  <link rel="stylesheet" href="style/logout.css">
+  <link rel="stylesheet" href="/style/cart.css">
+  <link rel="stylesheet" href="/style/cart-list.css">
+  <link rel="stylesheet" href="/style/checkout.css">
+  <link rel="stylesheet" href="/style/profilePic.css">
+  <link rel="stylesheet" href="/style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -178,7 +178,7 @@ if ($buyer_id) {
 
         <div class="top-container">
           <div class="top-container-top-part">
-            <img class="cart-icon" src="./images/SVGRepo_iconCarrier.svg">
+            <img class="cart-icon" src="/images/SVGRepo_iconCarrier.svg">
             <div class="vertical-line"></div>
             <p class="top-container-header">Shopping Cart</p>
           </div>
@@ -187,7 +187,7 @@ if ($buyer_id) {
 
         <div class="bottom-container">
 
-          <form method="post" action="./features/remove_from_cart.php" id="bulkRemoveForm">
+          <form method="post" action="/features/remove_from_cart.php" id="bulkRemoveForm">
             <div class="cart-table">
               <div class="cart-header">
                 <div class="product-header">
@@ -213,7 +213,7 @@ if ($buyer_id) {
                       <div class="product-details">
                         <!-- Update this checkbox: -->
                         <input class="item-check-box" type="checkbox" name="cart_item_ids[]" value="<?= $item['cart_item_id'] ?>">
-                        <img src="<?= !empty($item['image_path']) ? './images/products/' . htmlspecialchars($item['image_path']) : './images/product_image.png' ?>" alt="<?= htmlspecialchars($item['name']) ?>">
+                        <img src="<?= !empty($item['image_path']) ? '/images/products/' . htmlspecialchars($item['image_path']) : '/images/product_image.png' ?>" alt="<?= htmlspecialchars($item['name']) ?>">
                         <div class="product-info">
                           <h4><?= htmlspecialchars($item['name']) ?></h4>
                           <p>Variation/s:
@@ -230,9 +230,9 @@ if ($buyer_id) {
                           class="product-qty"
                           data-cart-item-id="<?= $item['cart_item_id'] ?>"
                           data-available="<?= intval($item['stock_quantity'] ?? 99) ?>">
-                          <img src="images/minus-svgrepo-com.svg" class="qty-minus" style="height: 20px; margin-right: 0;">
+                          <img src="/images/minus-svgrepo-com.svg" class="qty-minus" style="height: 20px; margin-right: 0;">
                           <p class="qty-text"><?= intval($item['quantity']) ?></p>
-                          <img src="images/add-plus-svgrepo-com.svg" class="qty-plus" style="height: 20px;">
+                          <img src="/images/add-plus-svgrepo-com.svg" class="qty-plus" style="height: 20px;">
                         </div>
                       </div>
                       <div class="total">
@@ -427,7 +427,7 @@ if ($buyer_id) {
     <div class="checkout-modal-content">
       <span class="close-modal" id="closeCheckoutModal">&times;</span>
       <h2>Order Summary</h2>
-      <form id="checkoutForm" method="post" action="features/checkout.php">
+      <form id="checkoutForm" method="post" action="/features/checkout.php">
         <div id="checkoutItems"></div>
         <div class="buyer-address">
           <h3>Shipping Address</h3>
@@ -546,7 +546,7 @@ if ($buyer_id) {
 
     // Logout on "Yes"
     document.getElementById("logoutYes").addEventListener("click", function() {
-      window.location.href = "./features/logout.php";
+      window.location.href = "/features/logout.php";
     });
 
     // ROLE CHECKER
@@ -558,11 +558,11 @@ if ($buyer_id) {
         settingsLink.addEventListener("click", function(e) {
           e.preventDefault();
           if (userRole === "buyer") {
-            window.location.href = "./user-handling/buyers/buyer_settings.php";
+            window.location.href = "/user-handling/buyers/buyer_settings.php";
           } else if (userRole === "seller") {
-            window.location.href = "./user-handling/sellers/seller_settings.php";
+            window.location.href = "/user-handling/sellers/seller_settings.php";
           } else {
-            window.location.href = "settings.php";
+            window.location.href = "/settings.php";
           }
         });
       }

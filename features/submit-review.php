@@ -64,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SESSION['username'])) {
     $role = $user['role'] ?? 'buyer';
 
     if ($role === 'seller') {
-        $redirect = '../../user-handling/sellers/seller_settings.php';
+        $redirect = '/user-handling/sellers/seller_settings.php';
     } else {
-        $redirect = '../../user-handling/buyers/buyer_settings.php';
+        $redirect = '/user-handling/buyers/buyer_settings.php';
     }
     echo "<script>alert('Your review was submitted successfully!'); window.location.href='$redirect';</script>";
     exit;

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once '../../features/db-connection.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
   header("Location: /homepage.php");
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["fileImg"]["name"])) 
   $username = $_POST['username'] ?? $_SESSION['username'];
   $src = $_FILES["fileImg"]["tmp_name"];
   $imageName = uniqid() . "_" . basename($_FILES["fileImg"]["name"]);
-  $target = "../../images/profiles/" . $imageName;
+  $target = "/images/profiles/" . $imageName;
 
   if (is_uploaded_file($src)) {
     if (move_uploaded_file($src, $target)) {
@@ -33,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["fileImg"]["name"])) 
 }
 
 $imagePath = (!empty($user['image']))
-  ? '../../images/profiles/' . $user['image']
-  : '../../images/profile-circle-svgrepo-com.png';
+  ? '/images/profiles/' . $user['image']
+  : '/images/profile-circle-svgrepo-com.png';
 ?>
 
 <!DOCTYPE html>
@@ -245,7 +245,7 @@ $imagePath = (!empty($user['image']))
         <?php
         // Get seller_id from the logged-in user
         $seller_id = $user['user_id'];
-        $query = "SELECT * FROM products WHERE seller_id = ?";
+        $query = "SELECT * FROM products WHERE seller_id = ? AND is_active = 1";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $seller_id);
         $stmt->execute();
@@ -291,7 +291,8 @@ $imagePath = (!empty($user['image']))
                         class="edit-button"
                         onclick="window.location.href='edit-products.php?id=<?= htmlspecialchars($row['product_id']) ?>'">
                         Edit
-                      </button> <button type="button" class="remove-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Remove</button>
+                      </button>
+                      <button type="button" class="remove-button" data-product-id="<?= htmlspecialchars($row['product_id']) ?>">Remove</button>
                     </td>
                   </tr>
                 <?php endwhile; ?>
@@ -1041,7 +1042,7 @@ $imagePath = (!empty($user['image']))
       btn.addEventListener('click', function() {
         const productId = this.getAttribute('data-product-id');
         if (confirm('Are you sure you want to remove this product?')) {
-          window.location.href = '../../user-handling/sellers/remove-product.php?id=' + encodeURIComponent(productId);
+          window.location.href = "/user-handling/sellers/remove-product.php?id=" + encodeURIComponent(productId);
         }
       });
     });
