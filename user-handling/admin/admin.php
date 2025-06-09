@@ -51,8 +51,8 @@ $recentCount = count($recentUsers);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans</title>
-  <link rel="stylesheet" href="../../style/admin.css">
-  <link rel="stylesheet" href="../../style/logout.css">
+  <link rel="stylesheet" href="/style/admin.css">
+  <link rel="stylesheet" href="/style/logout.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -81,7 +81,7 @@ $recentCount = count($recentUsers);
   <main>
     <header class="header">
       <div class="left-header">
-        <a href="../../homepage.php">Wear Dyans</a>
+        <a href="/homepage.php">Wear Dyans</a>
       </div>
       <div class="sub-menu-link" id="logout" style="color: white;">
         <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -103,7 +103,7 @@ $recentCount = count($recentUsers);
           <div class="middle-container-box" id="sellerBox" style="cursor:pointer;">
             <div class=" box-header">
               <h2 class="total-header">Total Sellers</h2>
-              <img src="../../images/image 56.png">
+              <img src="/images/image 56.png">
             </div>
             <h3 class="total-number"><?= number_format($totalSellers) ?></h3>
             <p class="bottom-text">Registered sellers on the platform</p>
@@ -112,7 +112,7 @@ $recentCount = count($recentUsers);
           <div class="middle-container-box" id="buyerBox" style="cursor:pointer;">
             <div class="box-header">
               <h2 class="total-header">Total Buyers</h2>
-              <img src="../../images/image 55.png">
+              <img src="/images/image 55.png">
             </div>
             <h3 class="total-number"><?= number_format($totalBuyers) ?></h3>
             <p class="bottom-text">Active buyers on the platform</p>

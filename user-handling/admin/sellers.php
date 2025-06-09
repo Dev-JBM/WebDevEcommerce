@@ -63,9 +63,9 @@ if ($sellersResult) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wear Dyans</title>
-    <link rel="stylesheet" href="../../style/admin.css">
-    <link rel="stylesheet" href="../../style/view-data.css">
-    <link rel="stylesheet" href="../../style/logout.css">
+    <link rel="stylesheet" href="/style/admin.css">
+    <link rel="stylesheet" href="/style/view-data.css">
+    <link rel="stylesheet" href="/style/logout.css">
     <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
 
@@ -94,7 +94,7 @@ if ($sellersResult) {
     <main>
         <header class="header">
             <div class="left-header">
-                <a href="../../homepage.php">Wear Dyans</a>
+                <a href="/homepage.php">Wear Dyans</a>
             </div>
             <div class="sub-menu-link" id="logout" style="color: white;">
                 <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -115,8 +115,8 @@ if ($sellersResult) {
                     <div style="display: flex; align-items: center;">
                         <h2 class="orders-header">Sort Accounts </h2>
                         <div class="sort-button">
-                            <img id="asc" class="asc" src="../../images/sort-from-bottom-to-top-svgrepo-com.svg" style="display:none;">
-                            <img id="desc" class="desc" src="../../images/sort-from-top-to-bottom-svgrepo-com.svg">
+                            <img id="asc" class="asc" src="/images/sort-from-bottom-to-top-svgrepo-com.svg" style="display:none;">
+                            <img id="desc" class="desc" src="/images/sort-from-top-to-bottom-svgrepo-com.svg">
                         </div>
                     </div>
                     <div class="orders-table-container">

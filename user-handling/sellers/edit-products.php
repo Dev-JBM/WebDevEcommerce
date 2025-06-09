@@ -3,7 +3,7 @@ session_start();
 require_once '../../features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../../homepage.php");
+    header("Location: /homepage.php");
     exit;
 }
 
@@ -55,9 +55,9 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <title>Edit Product</title>
-    <link rel="stylesheet" href="../../style/settings.css">
-    <link rel="stylesheet" href="../../style/profilePic.css">
-    <link rel="stylesheet" href="../../style/logout.css">
+    <link rel="stylesheet" href="/style/settings.css">
+    <link rel="stylesheet" href="/style/profilePic.css">
+    <link rel="stylesheet" href="/style/logout.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
@@ -67,11 +67,11 @@ $stmt->close();
     <main>
         <header class="header">
             <div class="left-header">
-                <a href="../../store.php">Wear Dyans</a>
+                <a href="/store.php">Wear Dyans</a>
             </div>
 
             <div class="right-header">
-                <a href="../../cart.php"><img src="../../images/SVGRepo_iconCarrier.png"></a>
+                <a href="/cart.php"><img src="/images/SVGRepo_iconCarrier.png"></a>
                 <img class="profile" src="<?= htmlspecialchars($imagePath); ?>" onclick="toggleMenu()">
                 <div class="sub-menu-wrap" id="subMenu">
                     <div class="sub-menu">
@@ -85,7 +85,7 @@ $stmt->close();
                                 <path
                                     d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6zM432 480H80a31 31 0 01-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75 1.94 10.73-.68 21.34-7.18 29.11A31 31 0 01432 480z" />
                             </svg>
-                            <a class="sub-menu-text" href="../../store.php">Back to shopping</a>
+                            <a class="sub-menu-text" href="/store.php">Back to shopping</a>
                             <span>></span>
                         </div>
 
@@ -106,7 +106,7 @@ $stmt->close();
         <div class="add-product" style="display: flex; max-width: 1250px;">
             <div class="title" style="display: flex; align-items: center; justify-content: space-between;">
                 <p>Edit Product</p>
-                <a href="../../user-handling/sellers/seller_settings.php" style="margin-left:auto; margin-right: 40px; color: #FF7F7F; font-size: 0.5em;">
+                <a href="/user-handling/sellers/seller_settings.php" style="margin-left:auto; margin-right: 40px; color: #FF7F7F; font-size: 0.5em;">
                     < Back to Settings
                 </a>
             </div>
@@ -135,8 +135,8 @@ $stmt->close();
                         </div>
 
                         <div class="select-container">
-                            <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                            <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                            <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                            <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                             <label class="add-product-label" for="gender">Gender:</label>
                             <select id="gender" name="gender" disabled>
                                 <option value="" disabled hidden></option>
@@ -147,8 +147,8 @@ $stmt->close();
                         </div>
 
                         <div class="select-container">
-                            <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                            <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                            <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                            <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                             <label class="add-product-label" for="category">Category:</label>
                             <select id="category" name="category" disabled>
                                 <option value="" disabled hidden></option>
@@ -158,8 +158,8 @@ $stmt->close();
                         </div>
 
                         <div class="select-container" id="clothesType-container" style="display:<?= $product['category'] == 'Clothes' ? 'flex' : 'none' ?>">
-                            <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                            <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                            <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                            <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                             <label class="add-product-label" for="clothesType">Type:</label>
                             <select id="clothesType" name="clothesType" disabled>
                                 <option value="" disabled hidden></option>
@@ -173,8 +173,8 @@ $stmt->close();
                         </div>
 
                         <div class="select-container" id="accessoriesType-container" style="display:<?= $product['category'] == 'Accessories' ? 'flex' : 'none' ?>">
-                            <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                            <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                            <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                            <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                             <label class="add-product-label" for="accessoriesType">Type:</label>
                             <select id="accessoriesType" name="accessoriesType" disabled>
                                 <option value="" disabled hidden></option>

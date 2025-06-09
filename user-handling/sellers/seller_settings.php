@@ -4,7 +4,7 @@ session_start();
 require_once '../../features/db-connection.php';
 
 if (!isset($_SESSION['username'])) {
-  header("Location: ../../homepage.php");
+  header("Location: /homepage.php");
   exit;
 }
 
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES["fileImg"]["name"])) 
       mysqli_stmt_bind_param($stmt, "ss", $imageName, $username);
       mysqli_stmt_execute($stmt);
       mysqli_stmt_close($stmt);
-      header("Location: ../../user-handling/sellers/seller_settings.php");
+      header("Location: /user-handling/sellers/seller_settings.php");
       exit;
     }
   }
@@ -44,9 +44,9 @@ $imagePath = (!empty($user['image']))
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Wear Dyans | Settings</title>
-  <link rel="stylesheet" href="../../style/settings.css">
-  <link rel="stylesheet" href="../../style/profilePic.css">
-  <link rel="stylesheet" href="../../style/logout.css">
+  <link rel="stylesheet" href="/style/settings.css">
+  <link rel="stylesheet" href="/style/profilePic.css">
+  <link rel="stylesheet" href="/style/logout.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
 </head>
@@ -55,11 +55,11 @@ $imagePath = (!empty($user['image']))
   <main>
     <header class="header">
       <div class="left-header">
-        <a href="../../store.php">Wear Dyans</a>
+        <a href="/store.php">Wear Dyans</a>
       </div>
 
       <div class="right-header">
-        <a href="../../cart.php"><img src="../../images/SVGRepo_iconCarrier.png"></a>
+        <a href="/cart.php"><img src="/images/SVGRepo_iconCarrier.png"></a>
         <img class="profile" src="<?= htmlspecialchars($imagePath); ?>" onclick="toggleMenu()">
         <div class="sub-menu-wrap" id="subMenu">
           <div class="sub-menu">
@@ -73,7 +73,7 @@ $imagePath = (!empty($user['image']))
                 <path
                   d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6zM432 480H80a31 31 0 01-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75 1.94 10.73-.68 21.34-7.18 29.11A31 31 0 01432 480z" />
               </svg>
-              <a class="sub-menu-text" href="../../store.php">Back to shopping</a>
+              <a class="sub-menu-text" href="/store.php">Back to shopping</a>
               <span>></span>
             </div>
 
@@ -117,30 +117,30 @@ $imagePath = (!empty($user['image']))
         <div class="menu-container">
           <div class="btn-container">
             <button type="button" class="my-account-btn">
-              <img src="../../images/person-male-svgrepo-com.svg">
+              <img src="/images/person-male-svgrepo-com.svg">
               My Account
             </button>
             <button type="button" class="my-products-btn">
-              <img src="../../images/product-svgrepo-com.svg">
+              <img src="/images/product-svgrepo-com.svg">
               My Products
             </button>
             <button type="button" class="add-product-btn">
-              <img src="../../images/add-square-svgrepo-com.svg">
+              <img src="/images/add-square-svgrepo-com.svg">
               Add Product
             </button>
             <hr>
             <hr>
             <hr>
             <button type="button" class="orders-btn">
-              <img src="../../images/order-svgrepo-com.svg">
+              <img src="/images/order-svgrepo-com.svg">
               Orders
             </button>
             <button type="button" class="earnings-btn">
-              <img src="../../images/money-svgrepo-com.svg">
+              <img src="/images/money-svgrepo-com.svg">
               Earnings
             </button>
             <button type="button" class="logout-btn" id="logoutMenu">
-              <img src="../../images/logout-svgrepo-com.svg">
+              <img src="/images/logout-svgrepo-com.svg">
               Logout
             </button>
           </div>
@@ -205,24 +205,24 @@ $imagePath = (!empty($user['image']))
                 <label class="add-product-label" for="password">Enter Password:</label>
                 <input class="password-input" type="password" id="password" name="password" readonly>
                 <span class="toggle-password">
-                  <img class="eye-close" src="../../images/eye-close-svgrepo-com.svg" style="display:inline;">
-                  <img class="eye-open" src="../../images/eye-2-svgrepo-com.svg" style="display:none;">
+                  <img class="eye-close" src="/images/eye-close-svgrepo-com.svg" style="display:inline;">
+                  <img class="eye-open" src="/images/eye-2-svgrepo-com.svg" style="display:none;">
                 </span>
               </div>
               <div class="input-box">
                 <label class="add-product-label" for="newpassword">New Password:</label>
                 <input class="password-input" type="password" id="newpassword" name="newpassword" readonly>
                 <span class="toggle-password">
-                  <img class="eye-close" src="../../images/eye-close-svgrepo-com.svg" style="display:inline;">
-                  <img class="eye-open" src="../../images/eye-2-svgrepo-com.svg" style="display:none;">
+                  <img class="eye-close" src="/images/eye-close-svgrepo-com.svg" style="display:inline;">
+                  <img class="eye-open" src="/images/eye-2-svgrepo-com.svg" style="display:none;">
                 </span>
               </div>
               <div class="input-box">
                 <label class="add-product-label" for="confirmnewpassword" style="font-size: 22px;">Confirm New Password:</label>
                 <input class="password-input" type="password" id="confirmnewpassword" name="confirmnewpassword" readonly>
                 <span class="toggle-password">
-                  <img class="eye-close" src="../../images/eye-close-svgrepo-com.svg" style="display:inline;">
-                  <img class="eye-open" src="../../images/eye-2-svgrepo-com.svg" style="display:none;">
+                  <img class="eye-close" src="/images/eye-close-svgrepo-com.svg" style="display:inline;">
+                  <img class="eye-open" src="/images/eye-2-svgrepo-com.svg" style="display:none;">
                 </span>
               </div>
 
@@ -282,7 +282,7 @@ $imagePath = (!empty($user['image']))
                     <td class="id-input"><?= htmlspecialchars($row['updated_at']) ?></td>
                     <td class="id-input"><?= htmlspecialchars($row['name']) ?></td>
                     <td class="last-product-image">
-                      <img class="my-product-product-image" src="../../images/products/<?= htmlspecialchars($row['image_path']) ?>" alt="image">
+                      <img class="my-product-product-image" src="/images/products/<?= htmlspecialchars($row['image_path']) ?>" alt="image">
                     </td>
                     <td class="id-input">PHP <?= number_format($row['price'], 2) ?></td>
                     <td class="id-input"><?= htmlspecialchars($row['stock_quantity']) ?></td>
@@ -332,8 +332,8 @@ $imagePath = (!empty($user['image']))
               </div>
 
               <div class="select-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                 <label class="add-product-label" for="category">Gender:</label>
                 <select id="gender" name="gender">
                   <option value="" selected disabled hidden></option>
@@ -344,8 +344,8 @@ $imagePath = (!empty($user['image']))
               </div>
 
               <div class="select-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                 <label class="add-product-label" for="category">Category:</label>
                 <select id="category" name="category">
                   <option value="" selected disabled hidden></option>
@@ -355,8 +355,8 @@ $imagePath = (!empty($user['image']))
               </div>
 
               <div class="select-container" id="clothesType-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                 <label class="add-product-label" for="clothesType">Type:</label>
                 <select id="clothesType" name="clothesType">
                   <option value="" selected disabled hidden></option>
@@ -374,8 +374,8 @@ $imagePath = (!empty($user['image']))
               </div>
 
               <div class="select-container" id="accessoriesType-container">
-                <img class="arrow-down" src="../../images/arrow-down-338-svgrepo-com.svg">
-                <img class="arrow-up" src="../../images/arrow-up-338-svgrepo-com.svg">
+                <img class="arrow-down" src="/images/arrow-down-338-svgrepo-com.svg">
+                <img class="arrow-up" src="/images/arrow-up-338-svgrepo-com.svg">
                 <label class="add-product-label" for="accessoriesType">Type:</label>
                 <select id="accessoriesType" name="accessoriesType">
                   <option value="" selected disabled hidden></option>

@@ -3,7 +3,7 @@ session_start();
 require_once 'db-connection.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../homepage.php");
+    header("Location: /homepage.php");
     exit;
 }
 
@@ -61,11 +61,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['cart_item_ids']) && 
     $del_stmt->bind_param($types, ...$cart_item_ids);
     $del_stmt->execute();
 
-    header("Location: ../cart.php?success=1");
+    header("Location: /cart.php?success=1");
     exit;
 } else {
     // Invalid request
-    header("Location: ../cart.php?error=1");
+    header("Location: /cart.php?error=1");
     exit;
 }
 ?>

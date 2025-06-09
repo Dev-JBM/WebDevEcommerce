@@ -3,7 +3,7 @@ session_start();
 require_once 'db-connection.php';
 
 if (!isset($_SESSION['username'])) {
-    header("Location: ../homepage.php");
+    header("Location: /homepage.php");
     exit;
 }
 
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result && $row = $result->fetch_assoc()) {
             $seller_id = $row['seller_id'];
         } else {
-            header("Location: ../product.php?error=productnotfound");
+            header("Location: /product.php?error=productnotfound");
             exit;
         }
         $stmt->close();
@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stock_stmt->bind_param("ii", $quantity, $product_id);
         $stock_stmt->execute();
 
-        header("Location: ../product.php?id=" . $product_id . "&success=1");
+        header("Location: /product.php?id=" . $product_id . "&success=1");
         exit;
     }
 
@@ -114,11 +114,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $del_stmt->bind_param($types, ...$cart_item_ids);
         $del_stmt->execute();
 
-        header("Location: ../product.php?id=" . $product_id . "&success=1");
+        header("Location: /product.php?id=" . $product_id . "&success=1");
         exit;
     }
 }
 
 // Invalid request
-header("Location: ../product.php?error=1");
+header("Location: /product.php?error=1");
 exit;

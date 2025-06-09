@@ -21,5 +21,5 @@ if (isset($_POST['cart_item_id'])) {
     $query = "DELETE FROM cart_items WHERE cart_item_id IN ($in)";
     $conn->query($query);
 }
-header("Location: ../cart.php");
+header("Location: /cart.php");
 exit;

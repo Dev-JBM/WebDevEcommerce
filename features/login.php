@@ -29,10 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Role-based redirection
             if (isset($user['role'])) {
                 if ($user['role'] === 'admin') {
-                    header("Location: ../user-handling/admin/admin.php");
+                    header("Location: /user-handling/admin/admin.php");
                     exit;
                 } elseif ($user['role'] === 'buyer' || $user['role'] === 'seller') {
-                    header("Location: ../store.php");
+                    header("Location: /store.php");
                     exit;
                 } else {
                     $message = "Unknown user role.";
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (!empty($message)) {
         $_SESSION['login_error'] = $message;
-        header("Location: ../homepage.php");
+        header("Location: /homepage.php");
         exit;
     }
 

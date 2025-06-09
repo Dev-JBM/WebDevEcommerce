@@ -107,10 +107,10 @@ if (!empty($orderIds)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wear Dyans</title>
-    <link rel="stylesheet" href="../../style/admin.css">
-    <link rel="stylesheet" href="../../style/view-data.css">
-    <link rel="stylesheet" href="../../style/settings.css">
-    <link rel="stylesheet" href="../../style/logout.css">
+    <link rel="stylesheet" href="/style/admin.css">
+    <link rel="stylesheet" href="/style/view-data.css">
+    <link rel="stylesheet" href="/style/settings.css">
+    <link rel="stylesheet" href="/style/logout.css">
     <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Mandali&family=Aoboshi+One&family=Inter:ital,wght@0,100..900;1,100..900&family=MuseoModerno:ital,wght@0,100..900;1,100..900&family=Podkova:wght@400..800&display=swap" rel="stylesheet">
     <style>
         .my-account {
@@ -144,7 +144,7 @@ if (!empty($orderIds)) {
     <main>
         <header class="header">
             <div class="left-header">
-                <a href="../../homepage.php">Wear Dyans</a>
+                <a href="/homepage.php">Wear Dyans</a>
             </div>
             <div class="sub-menu-link" id="logout" style="color: white;">
                 <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
@@ -227,24 +227,24 @@ if (!empty($orderIds)) {
                                 <label class="add-product-label" for="password">Enter Password:</label>
                                 <input class="password-input" type="password" id="password" name="password" readonly>
                                 <span class="toggle-password">
-                                    <img class="eye-close" src="../../images/eye-close-svgrepo-com.svg" style="display:inline;">
-                                    <img class="eye-open" src="../../images/eye-2-svgrepo-com.svg" style="display:none;">
+                                    <img class="eye-close" src="/images/eye-close-svgrepo-com.svg" style="display:inline;">
+                                    <img class="eye-open" src="/images/eye-2-svgrepo-com.svg" style="display:none;">
                                 </span>
                             </div>
                             <div class="input-box">
                                 <label class="add-product-label" for="newpassword">New Password:</label>
                                 <input class="password-input" type="password" id="newpassword" name="newpassword" readonly>
                                 <span class="toggle-password">
-                                    <img class="eye-close" src="../../images/eye-close-svgrepo-com.svg" style="display:inline;">
-                                    <img class="eye-open" src="../../images/eye-2-svgrepo-com.svg" style="display:none;">
+                                    <img class="eye-close" src="/images/eye-close-svgrepo-com.svg" style="display:inline;">
+                                    <img class="eye-open" src="/images/eye-2-svgrepo-com.svg" style="display:none;">
                                 </span>
                             </div>
                             <div class="input-box">
                                 <label class="add-product-label" for="confirmnewpassword" style="font-size: 22px;">Confirm New Password:</label>
                                 <input class="password-input" type="password" id="confirmnewpassword" name="confirmnewpassword" readonly>
                                 <span class="toggle-password">
-                                    <img class="eye-close" src="../../images/eye-close-svgrepo-com.svg" style="display:inline;">
-                                    <img class="eye-open" src="../../images/eye-2-svgrepo-com.svg" style="display:none;">
+                                    <img class="eye-close" src="/images/eye-close-svgrepo-com.svg" style="display:inline;">
+                                    <img class="eye-open" src="/images/eye-2-svgrepo-com.svg" style="display:none;">
                                 </span>
                             </div>
                         </div>
